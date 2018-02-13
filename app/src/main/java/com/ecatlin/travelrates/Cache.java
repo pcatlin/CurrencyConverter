@@ -1,4 +1,4 @@
-package com.ecatlin.currencyconverter;
+package com.ecatlin.travelrates;
 
 import android.content.Context;
 import android.util.Log;

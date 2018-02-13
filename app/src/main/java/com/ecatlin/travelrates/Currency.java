@@ -1,4 +1,4 @@
-package com.ecatlin.currencyconverter;
+package com.ecatlin.travelrates;
 
 /**
  * Created by paul on 19/03/2017.
