@@ -132,17 +132,29 @@ public class MainActivity extends AppCompatActivity
 
         updateNumbers();
 
-        // admob app id     ca-app-pub-9612116433207542~2023116000
-        // admob ad unit id ca-app-pub-9612116433207542/1858151398
-
-        // test banner id ca-app-pub-3940256099942544/6300978111
-        MobileAds.initialize(this, "ca-app-pub-9612116433207542~2023116000");
-
         mAdView = (AdView)findViewById(R.id.adView);
-        AdRequest adRequest = new AdRequest.Builder()
-                .addTestDevice(AdRequest.DEVICE_ID_EMULATOR)
-                .build();
-        mAdView.loadAd(adRequest);
+        View mDivider = (View)findViewById(R.id.dividerline);
+
+        if (BuildConfig.FLAVOR.equals("ads")) {
+
+            /*
+            admob app id        ca-app-pub-9612116433207542~2023116000
+            admob ad unit id    ca-app-pub-9612116433207542/1858151398
+            test banner id      ca-app-pub-3940256099942544/6300978111
+            */
+
+            MobileAds.initialize(this, "ca-app-pub-9612116433207542~2023116000");
+
+            AdRequest adRequest = new AdRequest.Builder()
+                    .addTestDevice(AdRequest.DEVICE_ID_EMULATOR)
+                    .build();
+            mAdView.loadAd(adRequest);
+
+        }else{
+            mAdView.setVisibility(View.GONE);
+            mDivider.setVisibility(View.GONE);
+        }
+
 
     }
 

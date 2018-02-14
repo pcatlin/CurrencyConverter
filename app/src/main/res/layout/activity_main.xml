@@ -207,15 +207,19 @@
                 android:layout_height="wrap_content"
                 android:layout_centerHorizontal="true"
                 android:layout_alignParentBottom="true"
+                android:visibility="visible"
+
                 ads:adSize="BANNER"
                 ads:adUnitId="ca-app-pub-9612116433207542/1858151398">
             </com.google.android.gms.ads.AdView>
 
             <View
+                android:id="@+id/dividerline"
                 android:layout_width="wrap_content"
                 android:layout_height="1dp"
                 android:background="@color/colorPrimaryDark"
-                style="@style/thenumbers"/>
+                style="@style/thenumbers"
+                android:visibility="visible"/>
         </LinearLayout>
 
 
