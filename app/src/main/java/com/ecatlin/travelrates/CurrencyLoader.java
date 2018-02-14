@@ -1,4 +1,4 @@
-package com.ecatlin.currencyconverter;
+package com.ecatlin.travelrates;
 
 import android.content.AsyncTaskLoader;
 import android.content.Context;
@@ -21,7 +21,7 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.Locale;
 
-import static com.ecatlin.currencyconverter.Cache.writeRatesToFile;
+import static com.ecatlin.travelrates.Cache.writeRatesToFile;
 
 /**
  * Created by paul on 19/03/2017.

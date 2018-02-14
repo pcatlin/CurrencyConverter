@@ -1,4 +1,4 @@
-package com.ecatlin.currencyconverter;
+package com.ecatlin.travelrates;
 
 import android.app.LoaderManager;
 import android.app.LoaderManager.LoaderCallbacks;
@@ -15,21 +15,30 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.MobileAds;
+
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 
-import static com.ecatlin.currencyconverter.Cache.cacheAge;
-import static com.ecatlin.currencyconverter.Cache.readRatesFromFile;
-import static com.ecatlin.currencyconverter.CurrencyLoader.parseJSONrates;
+import static com.ecatlin.travelrates.Cache.cacheAge;
+import static com.ecatlin.travelrates.Cache.readRatesFromFile;
+import static com.ecatlin.travelrates.CurrencyLoader.parseJSONrates;
+
+
+
 
 public class MainActivity extends AppCompatActivity
         implements LoaderCallbacks<CurrencyRates>{
 
+    private AdView mAdView;
     CurrencyRates cr;
     int chosenRateIndex;
     Currency chosenCurrency;
     String homeCurrency = "GBP";
     ArrayList<Country> Countries = new ArrayList<Country>();
+
 
 
     // TODO settings dialog to change home currency
@@ -122,6 +131,30 @@ public class MainActivity extends AppCompatActivity
         });
 
         updateNumbers();
+
+        mAdView = (AdView)findViewById(R.id.adView);
+        View mDivider = (View)findViewById(R.id.dividerline);
+
+        if (BuildConfig.FLAVOR.equals("ads")) {
+
+            /*
+            admob app id        ca-app-pub-9612116433207542~2023116000
+            admob ad unit id    ca-app-pub-9612116433207542/1858151398
+            test banner id      ca-app-pub-3940256099942544/6300978111
+            */
+
+            MobileAds.initialize(this, "ca-app-pub-9612116433207542~2023116000");
+
+            AdRequest adRequest = new AdRequest.Builder()
+                    .addTestDevice(AdRequest.DEVICE_ID_EMULATOR)
+                    .build();
+            mAdView.loadAd(adRequest);
+
+        }else{
+            mAdView.setVisibility(View.GONE);
+            mDivider.setVisibility(View.GONE);
+        }
+
 
     }
 

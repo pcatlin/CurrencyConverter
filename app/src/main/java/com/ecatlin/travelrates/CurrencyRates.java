@@ -1,4 +1,4 @@
-package com.ecatlin.currencyconverter;
+package com.ecatlin.travelrates;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
