@@ -44,6 +44,7 @@ class CurrencyRates {
     }
 
     void Empty(){
+        mCurrencyCodes.clear();
         mCurrencies.clear();
         mDateUpdated = null;
     }

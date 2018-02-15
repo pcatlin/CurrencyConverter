@@ -7,7 +7,6 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -55,6 +54,7 @@ public class MainActivity extends AppCompatActivity
 
         getCurrencyRates();
 
+        // TODO remember last used currency
         chosenCurrency=cr.mCurrencies.get(0);
 
         // populate the spinner/dropdown box with currencies
@@ -78,6 +78,8 @@ public class MainActivity extends AppCompatActivity
                 // set rate textview
                 TextView rate = (TextView)findViewById(R.id.rateText);
                 rate.setText("Rate: " + String.valueOf(chosenCurrency.getRate()));
+
+                //Log.d("SPINNER", "ChosenCurrency->getcode:" + chosenCurrency.getCurrencyCode() + " chosenCurrency->getRate:" + chosenCurrency.getRate() + "\n" + "ChosenRateIndex: " + chosenRateIndex);
 
                 updateNumbers();
 
@@ -201,15 +203,15 @@ public class MainActivity extends AppCompatActivity
             // and start loading new data from the web
             getLoaderManager().initLoader(0, null, this);
 
-            Log.d("getRates","No cache file found. Using historic rates and getting new rates from net.");
+            //Log.d("getRates","No cache file found. Using ancient rates and getting new rates from net.");
 
-        }else if(fileAge>864) { // 8640000
+        }else if(fileAge>8640000) { // 8640000
             // old file in cache over 1 day old
             // start loading new data from the web
             getLoaderManager().initLoader(0, null, this);
-            Log.d("getRates","Old cache file found. Using its rates and getting new rates from net.");
+            //Log.d("getRates","Old cache file found. Using its rates and getting new rates from net.");
         }else {
-            Log.d("getRates","Recent cache file found. Using its rates only.");
+            //Log.d("getRates","Recent cache file found. Using its rates only.");
         }
 
         cr = parseJSONrates(rates);

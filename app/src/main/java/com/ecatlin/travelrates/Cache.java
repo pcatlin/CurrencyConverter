@@ -25,7 +25,7 @@ class Cache {
             FileOutputStream fos = c.openFileOutput(FILENAME, MODE_PRIVATE);
             fos.write(ratesJSON.getBytes());
             fos.close();
-            Log.d("FileWrite", "JSON written to file");
+            //Log.d("FileWrite", "JSON written to file");
         }catch(Exception error) {
             Log.e("FileWrite", error.toString());
         }
@@ -41,8 +41,8 @@ class Cache {
         Date lastModDate = new Date(file.lastModified());
         Date today = new Date();
         long diff = today.getTime() - lastModDate.getTime();
-        Log.d("cacheAge","Cache file modified: " + lastModDate.toString());
-        Log.d("cacheAge","Cache file age: " + valueOf(diff));
+        //Log.d("cacheAge","Cache file modified: " + lastModDate.toString());
+        //Log.d("cacheAge","Cache file age: " + valueOf(diff));
 
         return diff;
     }
@@ -71,7 +71,7 @@ class Cache {
                 fileContents += readstring;
             }
             InputRead.close();
-            Log.d("FileRead", "File read: " + fileContents);
+            //Log.d("FileRead", "File read: " + fileContents);
         }catch(Exception error) {
             Log.e("FileRead", error.toString());
         }

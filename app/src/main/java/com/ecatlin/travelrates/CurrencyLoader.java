@@ -112,7 +112,7 @@ class CurrencyLoader extends AsyncTaskLoader<CurrencyRates> {
                 // could be thrown.
                 inputStream.close();
             }
-            Log.d("HTTP","HTTP connection made OK");
+            //Log.d("HTTP","HTTP connection made OK");
         }
         return jsonResponse;
     }
@@ -128,8 +128,7 @@ class CurrencyLoader extends AsyncTaskLoader<CurrencyRates> {
             "date": "2017-03-10",
             "rates": {
                 "AUD": 1.6155,
-                "CAD": 1.6415,
-                "EUR": 1.1461
+                "CAD": 1.6415,...
                 }
         }
         */
@@ -160,8 +159,10 @@ class CurrencyLoader extends AsyncTaskLoader<CurrencyRates> {
                 if(!currencyCode.equals("") && rate!=0) cr.Add(new Currency(currencyCode, rate));
             }
 
-            cr.Add(new Currency("?", 1));  // custom rate
-            Log.d("parseJSON", "Parsed JSON dated: " + cr.getDateUpdated());
+            // TODO enable custom rate option
+            //cr.Add(new Currency("?", 1));  // custom rate
+
+            //Log.d("parseJSON", "Parsed JSON dated: " + cr.getDateUpdated());
             return cr;
 
         } catch (JSONException e) {
@@ -188,7 +189,7 @@ class CurrencyLoader extends AsyncTaskLoader<CurrencyRates> {
                 line = reader.readLine();
             }
         }
-        Log.d("NETREAD","Read from net" + output.toString());
+        //Log.d("NETREAD","Read from net" + output.toString());
         return output.toString();
     }
 
@@ -200,7 +201,7 @@ class CurrencyLoader extends AsyncTaskLoader<CurrencyRates> {
         URL url = null;
         try {
             url = new URL(stringUrl);
-            Log.d("URL", "Created URL: " + url.toString());
+            //Log.d("URL", "Created URL: " + url.toString());
         } catch (MalformedURLException e) {
             Log.e("URL", "Problem building the URL ", e);
         }
