@@ -4,9 +4,6 @@ import android.content.AsyncTaskLoader;
 import android.content.Context;
 import android.util.Log;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -15,13 +12,6 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.charset.Charset;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Iterator;
-import java.util.Locale;
-
-import static com.ecatlin.travelrates.Cache.writeRatesToFile;
 
 /**
  * Created by paul on 19/03/2017.
@@ -30,11 +20,9 @@ import static com.ecatlin.travelrates.Cache.writeRatesToFile;
 class CurrencyLoader extends AsyncTaskLoader<CurrencyRates> {
 
     private String mURL;
-    private Context mContext;
 
     public CurrencyLoader(Context context, String url) {
         super(context);
-        mContext = context;
         mURL = url;
     }
 
@@ -66,8 +54,8 @@ class CurrencyLoader extends AsyncTaskLoader<CurrencyRates> {
         }
 
 
-        CurrencyRates cr = parseJSONrates(jsonResponse);
-        if(cr != null) writeRatesToFile(mContext, jsonResponse);
+        CurrencyRates cr = new CurrencyRates();
+        cr.parseJSONrates(jsonResponse);
 
         return cr;
     }
@@ -115,61 +103,6 @@ class CurrencyLoader extends AsyncTaskLoader<CurrencyRates> {
             //Log.d("HTTP","HTTP connection made OK");
         }
         return jsonResponse;
-    }
-
-
-    static CurrencyRates parseJSONrates(String ratesJSON){
-
-        CurrencyRates cr;
-        /*
-        http://api.fixer.io/latest?base=GBP
-        {
-            "base": "GBP",
-            "date": "2017-03-10",
-            "rates": {
-                "AUD": 1.6155,
-                "CAD": 1.6415,...
-                }
-        }
-        */
-        try {
-
-            JSONObject root =  new JSONObject(ratesJSON);
-            String base = root.getString("base");
-            String dateString = root.getString("date");
-            SimpleDateFormat fmt = new SimpleDateFormat("yyyy-MM-dd", Locale.UK);
-            Date date;
-            try {
-                date = fmt.parse(dateString);
-            }
-            catch(ParseException pe) {
-                Log.e("parseJSON", "Problem parsing the JSON date");
-                date = new Date();
-            }
-
-            cr = new CurrencyRates(base, date);
-
-            JSONObject rates = root.getJSONObject("rates");
-            Iterator<String> keysIterator = rates.keys();
-            while (keysIterator.hasNext())
-            {
-                String currencyCode = keysIterator.next();
-                double rate = rates.getDouble(currencyCode);
-
-                if(!currencyCode.equals("") && rate!=0) cr.Add(new Currency(currencyCode, rate));
-            }
-
-            // TODO enable custom rate option
-            //cr.Add(new Currency("?", 1));  // custom rate
-
-            //Log.d("parseJSON", "Parsed JSON dated: " + cr.getDateUpdated());
-            return cr;
-
-        } catch (JSONException e) {
-            Log.e("parseJSON", "Problem parsing the JSON results", e);
-            return null;
-        }
-
     }
 
 

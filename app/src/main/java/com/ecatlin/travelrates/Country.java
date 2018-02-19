@@ -1,8 +1,11 @@
 package com.ecatlin.travelrates;
 
 /**
+ * Country class - matches countries with their currency codes
  * Created by paul on 13/03/2017.
  */
+
+
 
 class Country {
     private String Name;
@@ -17,4 +20,14 @@ class Country {
         CurrencyName = currencyName;
         CurrencyCode = currencyCode;
     }
+
+
+    Country(String code){
+        Name = "";
+        Code = code;
+        CurrencyName = "";
+        CurrencyCode = "";
+    }
+
+
 }

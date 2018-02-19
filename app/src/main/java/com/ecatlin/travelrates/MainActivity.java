@@ -1,12 +1,14 @@
 package com.ecatlin.travelrates;
 
-import android.app.LoaderManager;
 import android.app.LoaderManager.LoaderCallbacks;
+import android.content.Context;
 import android.content.Loader;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.telephony.TelephonyManager;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -20,10 +22,8 @@ import com.google.android.gms.ads.MobileAds;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Locale;
 
-import static com.ecatlin.travelrates.Cache.cacheAge;
-import static com.ecatlin.travelrates.Cache.readRatesFromFile;
-import static com.ecatlin.travelrates.CurrencyLoader.parseJSONrates;
 
 
 
@@ -37,6 +37,8 @@ public class MainActivity extends AppCompatActivity
     Currency chosenCurrency;
     String homeCurrency = "GBP";
     ArrayList<Country> Countries = new ArrayList<Country>();
+    Country userNetworkCountry, userSIMCountry;
+    Cache userCache, ratesCache;
 
 
 
@@ -48,15 +50,22 @@ public class MainActivity extends AppCompatActivity
         setContentView(R.layout.activity_main);
 
         // Get a reference to the LoaderManager, in order to interact with loaders.
-        LoaderManager loaderManager = getLoaderManager();
+        //LoaderManager loaderManager = getLoaderManager();
+
+        ratesCache = new Cache("rates");
+        userCache = new Cache("prefs");
 
         populateCountries();
+
+        inHomeCountry(this);
 
         getCurrencyRates();
 
         // TODO remember last used currency
+
         chosenCurrency=cr.mCurrencies.get(0);
 
+        // TODO move spinner loading to function
         // populate the spinner/dropdown box with currencies
         Spinner spinner = (Spinner) findViewById(R.id.convertTo);
 
@@ -149,6 +158,7 @@ public class MainActivity extends AppCompatActivity
 
             AdRequest adRequest = new AdRequest.Builder()
                     .addTestDevice(AdRequest.DEVICE_ID_EMULATOR)
+                    .addTestDevice("B016E2BD0ED7D45E64EF6901DAA24B31")
                     .build();
             mAdView.loadAd(adRequest);
 
@@ -172,6 +182,8 @@ public class MainActivity extends AppCompatActivity
         if (downloadedRates != null) {
             cr = downloadedRates;
 
+            ratesCache.write(this, downloadedRates.getJSON());
+
             TextView date = (TextView) findViewById(R.id.updatedText);
             date.setText(downloadedRates.getDateUpdated());
         }
@@ -191,9 +203,9 @@ public class MainActivity extends AppCompatActivity
         String tempJSON = "{\"base\":\"GBP\",\"date\":\"2017-03-10\",\"rates\":{\"AUD\":1.6155,\"BGN\":2.2416,\"BRL\":3.8618,\"CAD\":1.6415,\"CHF\":1.2313,\"CNY\":8.4053,\"CZK\":30.97,\"DKK\":8.5193,\"HKD\":9.4403,\"HRK\":8.5032,\"HUF\":357.9,\"IDR\":16259.0,\"ILS\":4.4798,\"INR\":80.999,\"JPY\":140.31,\"KRW\":1405.5,\"MXN\":24.032,\"MYR\":5.4133,\"NOK\":10.476,\"NZD\":1.7591,\"PHP\":61.067,\"PLN\":4.9581,\"RON\":5.2138,\"RUB\":71.858,\"SEK\":10.977,\"SGD\":1.7239,\"THB\":43.044,\"TRY\":4.5617,\"USD\":1.2156,\"ZAR\":16.124,\"EUR\":1.1461}}";
 
         // read cache file
-        String rates = readRatesFromFile(this);
+        String rates = ratesCache.read(this);
 
-        long fileAge = cacheAge(this);
+        long fileAge = ratesCache.cacheAge(this);
 
         if(rates.equals("")){
             // no file
@@ -203,18 +215,20 @@ public class MainActivity extends AppCompatActivity
             // and start loading new data from the web
             getLoaderManager().initLoader(0, null, this);
 
-            //Log.d("getRates","No cache file found. Using ancient rates and getting new rates from net.");
+            Log.d("getRates","No cache file found. Using ancient rates and getting new rates from net.");
 
-        }else if(fileAge>8640000) { // 8640000
+        }else if(fileAge>4000000) { // 8640000
             // old file in cache over 1 day old
             // start loading new data from the web
             getLoaderManager().initLoader(0, null, this);
-            //Log.d("getRates","Old cache file found. Using its rates and getting new rates from net.");
+            Log.d("getRates","Old cache file found. Age: " + fileAge + " Using its rates and getting new rates from net.");
+
         }else {
-            //Log.d("getRates","Recent cache file found. Using its rates only.");
+            Log.d("getRates","Recent cache file found. Cache age: " + fileAge + " Using its rates only.");
         }
 
-        cr = parseJSONrates(rates);
+        cr = new CurrencyRates();
+        cr.parseJSONrates(rates);
 
         TextView date = (TextView) findViewById(R.id.updatedText);
         date.setText(cr.getDateUpdated());
@@ -300,8 +314,42 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
-    private void determinelocation(){
-        // TODO determine current country
+
+    /**
+     * Get ISO 3166-1 alpha-2 country code for this device (or null if not available)
+     * @param context Context reference to get the TelephonyManager instance from
+     */
+    public Boolean inHomeCountry(Context context) {
+        try {
+
+            final TelephonyManager tm = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
+            String simCountry = tm.getSimCountryIso();
+
+            if (simCountry != null && simCountry.length() == 2) { // SIM country code is available
+
+                simCountry = simCountry.toUpperCase(Locale.US);
+                userSIMCountry = new Country(simCountry);
+                Log.d("PLACE", "SIM country: " + simCountry);
+
+            }
+
+            if (tm.getPhoneType() != TelephonyManager.PHONE_TYPE_CDMA) { // device is not 3G (would be unreliable)
+
+                String networkCountry = tm.getNetworkCountryIso();
+                if (networkCountry != null && networkCountry.length() == 2) { // network country code is available
+
+                    networkCountry = networkCountry.toUpperCase(Locale.US);
+                    userNetworkCountry = new Country(networkCountry);
+                    Log.d("PLACE", "Network country: " + networkCountry);
+
+                    return (userSIMCountry==userNetworkCountry);
+
+                }
+            }
+        }
+        catch (Exception e) { }
+        return null;
 
     }
+
 }

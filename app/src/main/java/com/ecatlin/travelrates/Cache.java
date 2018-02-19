@@ -17,13 +17,35 @@ import static java.lang.String.*;
  */
 
 class Cache {
-    static void writeRatesToFile(Context c, String ratesJSON){
 
-        String FILENAME = "CurrencyRates.json";
+    private String filename;
+    private Date modified;
+    private String type;
+
+    Cache(String theType){
+
+        switch(theType){
+            case "prefs":
+                filename = "Prefs.json";
+                modified = null;
+                type = theType;
+                break;
+            case "rates":
+                filename = "CurrencyRates.json";
+                modified = null;
+                type = theType;
+                break;
+        }
+
+    }
+
+
+
+    void write(Context c, String json){
 
         try {
-            FileOutputStream fos = c.openFileOutput(FILENAME, MODE_PRIVATE);
-            fos.write(ratesJSON.getBytes());
+            FileOutputStream fos = c.openFileOutput(filename, MODE_PRIVATE);
+            fos.write(json.getBytes());
             fos.close();
             //Log.d("FileWrite", "JSON written to file");
         }catch(Exception error) {
@@ -31,34 +53,35 @@ class Cache {
         }
     }
 
-    static long cacheAge(Context c){
+    long cacheAge(Context c){
 
-        String FILENAME = "CurrencyRates.json";
-        File file = c.getFileStreamPath(FILENAME);
+        File file = c.getFileStreamPath(filename);
 
         if(!file.exists()) return -1;
 
         Date lastModDate = new Date(file.lastModified());
         Date today = new Date();
+
         long diff = today.getTime() - lastModDate.getTime();
-        //Log.d("cacheAge","Cache file modified: " + lastModDate.toString());
-        //Log.d("cacheAge","Cache file age: " + valueOf(diff));
+
+        Log.d("CACHE", "Today: " + today.toString());
+        Log.d("CACHE","Cache file modified: " + lastModDate.toString());
+        Log.d("CACHE","Cache file age: " + valueOf(diff));
 
         return diff;
     }
 
-    static String readRatesFromFile(Context c){
+    String read(Context c){
 
-        String FILENAME = "CurrencyRates.json";
         String fileContents = "";
         int READ_BLOCK_SIZE = 100;
 
-        File file = c.getFileStreamPath(FILENAME);
+        File file = c.getFileStreamPath(filename);
         if(!file.exists()) return "";
 
 
         try {
-            FileInputStream fis = c.openFileInput(FILENAME);
+            FileInputStream fis = c.openFileInput(filename);
             InputStreamReader InputRead = new InputStreamReader(fis);
 
             char[] inputBuffer= new char[READ_BLOCK_SIZE];
