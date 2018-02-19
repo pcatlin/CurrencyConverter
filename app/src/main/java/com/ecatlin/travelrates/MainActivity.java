@@ -276,12 +276,73 @@ public class MainActivity extends AppCompatActivity
         home4.setTag(35);
         home5.setTag(50);
 
-        // TODO change away tags based on rate.  If rate is high, raise convert steps (tags)
-        away11.setTag(1);
-        away12.setTag(5);
-        away13.setTag(20);
-        away14.setTag(35);
-        away15.setTag(50);
+        if(chosenCurrency.getRate()<3) {
+            away11.setTag(1);
+            away12.setTag(5);
+            away13.setTag(20);
+            away14.setTag(35);
+            away15.setTag(50);
+        }else if(chosenCurrency.getRate()<6) {
+            away11.setTag(5);
+            away12.setTag(25);
+            away13.setTag(100);
+            away14.setTag(150);
+            away15.setTag(250);
+        }else if(chosenCurrency.getRate()<9) {
+            away11.setTag(10);
+            away12.setTag(50);
+            away13.setTag(150);
+            away14.setTag(300);
+            away15.setTag(500);
+        }else if(chosenCurrency.getRate()<13) {
+            away11.setTag(10);
+            away12.setTag(75);
+            away13.setTag(250);
+            away14.setTag(400);
+            away15.setTag(1000);
+        }else if(chosenCurrency.getRate()<30) {
+            away11.setTag(30);
+            away12.setTag(200);
+            away13.setTag(500);
+            away14.setTag(750);
+            away15.setTag(1500);
+        }else if(chosenCurrency.getRate()<50) {
+            away11.setTag(50);
+            away12.setTag(500);
+            away13.setTag(1000);
+            away14.setTag(2000);
+            away15.setTag(5000);
+        }else if(chosenCurrency.getRate()<100) {
+            away11.setTag(75);
+            away12.setTag(1000);
+            away13.setTag(2000);
+            away14.setTag(4000);
+            away15.setTag(10000);
+        }else if(chosenCurrency.getRate()<160) {
+            away11.setTag(100);
+            away12.setTag(1500);
+            away13.setTag(3000);
+            away14.setTag(5000);
+            away15.setTag(10000);
+        }else if(chosenCurrency.getRate()<350) {
+            away11.setTag(300);
+            away12.setTag(1000);
+            away13.setTag(5000);
+            away14.setTag(10000);
+            away15.setTag(25000);
+        }else if(chosenCurrency.getRate()<1600) {
+            away11.setTag(1000);
+            away12.setTag(5000);
+            away13.setTag(20000);
+            away14.setTag(50000);
+            away15.setTag(100000);
+        }else{
+            away11.setTag(20000);
+            away12.setTag(100000);
+            away13.setTag(300000);
+            away14.setTag(700000);
+            away15.setTag(1000000);
+        }
 
         home1.setText(getString(R.string.currencyvalue, home1.getTag(), homeCurrency));
         home2.setText(getString(R.string.currencyvalue, home2.getTag(), homeCurrency));
