@@ -13,6 +13,7 @@ import static android.content.Context.MODE_PRIVATE;
 import static java.lang.String.*;
 
 /**
+ * Cache class manages rates and user prefs/history
  * Created by paul on 19/03/2017.
  */
 
@@ -73,7 +74,7 @@ class Cache {
 
     String read(Context c){
 
-        String fileContents = "";
+        StringBuilder fileContents = new StringBuilder();
         int READ_BLOCK_SIZE = 100;
 
         File file = c.getFileStreamPath(filename);
@@ -91,7 +92,7 @@ class Cache {
             while ((charRead=InputRead.read(inputBuffer))>0) {
                 // char to string conversion
                 String readstring= copyValueOf(inputBuffer,0,charRead);
-                fileContents += readstring;
+                fileContents.append(readstring);
             }
             InputRead.close();
             //Log.d("FileRead", "File read: " + fileContents);
@@ -99,7 +100,7 @@ class Cache {
             Log.e("FileRead", error.toString());
         }
 
-        return fileContents;
+        return fileContents.toString();
     }
 
 }

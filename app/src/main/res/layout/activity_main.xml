@@ -45,20 +45,20 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:hint="Custom GBP"
+                android:hint="@string/custom"
                 android:inputType="numberDecimal"
-                style="@style/thenumbers"/>
+                style="@style/theNumbers"/>
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                style="@style/thenumbers"
-                android:text="="/>
+                style="@style/theNumbers"
+                android:text="@string/equals"/>
             <TextView
-                android:id="@+id/customaway"
+                android:id="@+id/customAway"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                style="@style/thenumbers"
+                style="@style/theNumbers"
                 tools:text="5 USD"/>
         </LinearLayout>
 
@@ -71,19 +71,19 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="2"
-                style="@style/thenumbers"
+                style="@style/theNumbers"
                 tools:text="£1"/>
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                style="@style/thenumbers"
-                android:text="="/>
+                style="@style/theNumbers"
+                android:text="@string/equals"/>
             <TextView
                 android:id="@+id/away1"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="2"
-                style="@style/thenumbers"
+                style="@style/theNumbers"
                 tools:text="$1"/>
         </LinearLayout>
 
@@ -96,19 +96,19 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="2"
-                style="@style/thenumbers"
+                style="@style/theNumbers"
                 tools:text="£5"/>
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                style="@style/thenumbers"
-                android:text="="/>
+                style="@style/theNumbers"
+                android:text="@string/equals"/>
             <TextView
                 android:id="@+id/away2"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="2"
-                style="@style/thenumbers"
+                style="@style/theNumbers"
                 tools:text="$5"/>
         </LinearLayout>
 
@@ -121,19 +121,19 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="2"
-                style="@style/thenumbers"
+                style="@style/theNumbers"
                 tools:text="£20"/>
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                style="@style/thenumbers"
-                android:text="="/>
+                style="@style/theNumbers"
+                android:text="@string/equals"/>
             <TextView
                 android:id="@+id/away3"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="2"
-                style="@style/thenumbers"
+                style="@style/theNumbers"
                 tools:text="$20"/>
         </LinearLayout>
 
@@ -146,19 +146,19 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="2"
-                style="@style/thenumbers"
+                style="@style/theNumbers"
                 tools:text="£50"/>
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                style="@style/thenumbers"
-                android:text="="/>
+                style="@style/theNumbers"
+                android:text="@string/equals"/>
             <TextView
                 android:id="@+id/away4"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="2"
-                style="@style/thenumbers"
+                style="@style/theNumbers"
                 tools:text="$50"/>
         </LinearLayout>
 
@@ -171,19 +171,19 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="2"
-                style="@style/thenumbers"
+                style="@style/theNumbers"
                 tools:text="£75"/>
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                style="@style/thenumbers"
-                android:text="="/>
+                style="@style/theNumbers"
+                android:text="@string/equals"/>
             <TextView
                 android:id="@+id/away5"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="2"
-                style="@style/thenumbers"
+                style="@style/theNumbers"
                 tools:text="$75"/>
         </LinearLayout>
 
@@ -197,17 +197,14 @@
                 android:layout_width="wrap_content"
                 android:layout_height="1dp"
                 android:background="@color/colorPrimaryDark"
-                style="@style/thenumbers"/>
+                style="@style/theNumbers"/>
 
             <com.google.android.gms.ads.AdView
                 xmlns:ads="http://schemas.android.com/apk/res-auto"
                 android:id="@+id/adView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_centerHorizontal="true"
-                android:layout_alignParentBottom="true"
                 android:visibility="visible"
-
                 ads:adSize="BANNER"
                 ads:adUnitId="ca-app-pub-9612116433207542/1858151398">
             </com.google.android.gms.ads.AdView>
@@ -217,7 +214,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="1dp"
                 android:background="@color/colorPrimaryDark"
-                style="@style/thenumbers"
+                style="@style/theNumbers"
                 android:visibility="visible"/>
         </LinearLayout>
 
@@ -232,21 +229,21 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                style="@style/thenumbers"
+                style="@style/theNumbers"
                 tools:text="5 USD"/>
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                style="@style/thenumbers"
-                android:text="="/>
+                style="@style/theNumbers"
+                android:text="@string/equals"/>
             <EditText
                 android:id="@+id/editCustomAway"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:hint="Custom USD"
+                android:hint="@string/custom"
                 android:inputType="numberDecimal"
-                style="@style/thenumbers"
+                style="@style/theNumbers"
                 />
         </LinearLayout>
 
@@ -259,19 +256,19 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="2"
-                style="@style/thenumbers"
+                style="@style/theNumbers"
                 tools:text="$1"/>
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                style="@style/thenumbers"
-                android:text="="/>
+                style="@style/theNumbers"
+                android:text="@string/equals"/>
             <TextView
                 android:id="@+id/away11"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="2"
-                style="@style/thenumbers"
+                style="@style/theNumbers"
                 tools:text="£1"/>
         </LinearLayout>
 
@@ -284,19 +281,19 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="2"
-                style="@style/thenumbers"
+                style="@style/theNumbers"
                 tools:text="$5"/>
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                style="@style/thenumbers"
-                android:text="="/>
+                style="@style/theNumbers"
+                android:text="@string/equals"/>
             <TextView
                 android:id="@+id/away12"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="2"
-                style="@style/thenumbers"
+                style="@style/theNumbers"
                 tools:text="£5"/>
         </LinearLayout>
 
@@ -309,19 +306,19 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="2"
-                style="@style/thenumbers"
+                style="@style/theNumbers"
                 tools:text="$20"/>
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                style="@style/thenumbers"
-                android:text="="/>
+                style="@style/theNumbers"
+                android:text="@string/equals"/>
             <TextView
                 android:id="@+id/away13"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="2"
-                style="@style/thenumbers"
+                style="@style/theNumbers"
                 tools:text="£20"/>
         </LinearLayout>
 
@@ -334,19 +331,19 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="2"
-                style="@style/thenumbers"
+                style="@style/theNumbers"
                 tools:text="$50"/>
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                style="@style/thenumbers"
-                android:text="="/>
+                style="@style/theNumbers"
+                android:text="@string/equals"/>
             <TextView
                 android:id="@+id/away14"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="2"
-                style="@style/thenumbers"
+                style="@style/theNumbers"
                 tools:text="£50"/>
         </LinearLayout>
 
@@ -359,19 +356,19 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="2"
-                style="@style/thenumbers"
+                style="@style/theNumbers"
                 tools:text="$75"/>
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                style="@style/thenumbers"
-                android:text="="/>
+                style="@style/theNumbers"
+                android:text="@string/equals"/>
             <TextView
                 android:id="@+id/away15"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="2"
-                style="@style/thenumbers"
+                style="@style/theNumbers"
                 tools:text="£75"/>
         </LinearLayout>
 

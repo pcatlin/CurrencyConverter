@@ -1,6 +1,10 @@
 package com.ecatlin.travelrates;
 
+import java.util.Locale;
+
 /**
+ * Currency code and rate class definition
+ *
  * Created by paul on 19/03/2017.
  */
 class Currency{
@@ -16,6 +20,14 @@ class Currency{
 
     double getRate() {
         return mRate;
+    }
+
+    String getStringRate() {
+
+        if(mRate == (long) mRate)
+            return String.format(Locale.UK,"%d",(long)mRate);
+        else
+            return String.format("%s",mRate);
     }
 
     public void setRate(double rate) {

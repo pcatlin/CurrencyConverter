@@ -14,6 +14,7 @@ import java.net.URL;
 import java.nio.charset.Charset;
 
 /**
+ * Loads rates from internet
  * Created by paul on 19/03/2017.
  */
 
@@ -21,7 +22,7 @@ class CurrencyLoader extends AsyncTaskLoader<CurrencyRates> {
 
     private String mURL;
 
-    public CurrencyLoader(Context context, String url) {
+    CurrencyLoader(Context context, String url) {
         super(context);
         mURL = url;
     }

@@ -32,13 +32,13 @@ public class MainActivity extends AppCompatActivity
         implements LoaderCallbacks<CurrencyRates>{
 
     private AdView mAdView;
-    CurrencyRates cr;
-    int chosenRateIndex;
-    Currency chosenCurrency;
-    String homeCurrency = "GBP";
-    ArrayList<Country> Countries = new ArrayList<Country>();
-    Country userNetworkCountry, userSIMCountry;
-    Cache userCache, ratesCache;
+    private CurrencyRates cr;
+    private int chosenRateIndex;
+    private Currency chosenCurrency;
+    private String homeCurrency = "GBP";
+    private ArrayList<Country> Countries = new ArrayList<>();
+    private Country userNetworkCountry, userSIMCountry;
+    private Cache userCache, ratesCache;
 
 
 
@@ -69,7 +69,7 @@ public class MainActivity extends AppCompatActivity
         // populate the spinner/dropdown box with currencies
         Spinner spinner = (Spinner) findViewById(R.id.convertTo);
 
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, cr.mCurrencyCodes);
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, cr.mCurrencyCodes);
 
         // Specify the layout to use when the list of choices appears
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -86,7 +86,7 @@ public class MainActivity extends AppCompatActivity
 
                 // set rate textview
                 TextView rate = (TextView)findViewById(R.id.rateText);
-                rate.setText("Rate: " + String.valueOf(chosenCurrency.getRate()));
+                rate.setText(getString(R.string.rate, chosenCurrency.getStringRate()));
 
                 //Log.d("SPINNER", "ChosenCurrency->getcode:" + chosenCurrency.getCurrencyCode() + " chosenCurrency->getRate:" + chosenCurrency.getRate() + "\n" + "ChosenRateIndex: " + chosenRateIndex);
 
@@ -103,7 +103,7 @@ public class MainActivity extends AppCompatActivity
 
         final EditText editCustomHome = (EditText) findViewById(R.id.editCustomHome);
         final EditText editCustomAway = (EditText) findViewById(R.id.editCustomAway);
-        final TextView customAway = (TextView) findViewById(R.id.customaway);
+        final TextView customAway = (TextView) findViewById(R.id.customAway);
         final TextView customHome = (TextView) findViewById(R.id.customhome);
         final DecimalFormat precision = new DecimalFormat("0.00");
 
@@ -116,7 +116,7 @@ public class MainActivity extends AppCompatActivity
                 if(s.length()>0) {
                     double conversion = Double.parseDouble(s.toString());
                     conversion *= chosenCurrency.getRate();
-                    customAway.setText(precision.format(conversion) + " " + chosenCurrency.getCurrencyCode());
+                    customAway.setText(getString(R.string.currencyvalue, precision.format(conversion), chosenCurrency.getCurrencyCode()));
                 }else customAway.setText("");
             }
 
@@ -133,7 +133,7 @@ public class MainActivity extends AppCompatActivity
                 if(s.length()>0) {
                     double conversion = Double.parseDouble(s.toString());
                     conversion /= chosenCurrency.getRate();
-                    customHome.setText(precision.format(conversion) + " " + homeCurrency);
+                    customHome.setText(getString(R.string.currencyvalue, precision.format(conversion), homeCurrency));
                 }else customHome.setText("");
             }
 
@@ -144,7 +144,7 @@ public class MainActivity extends AppCompatActivity
         updateNumbers();
 
         mAdView = (AdView)findViewById(R.id.adView);
-        View mDivider = (View)findViewById(R.id.dividerline);
+        View mDivider = findViewById(R.id.dividerline);
 
         if (BuildConfig.FLAVOR.equals("ads")) {
 
@@ -239,11 +239,11 @@ public class MainActivity extends AppCompatActivity
     private void updateNumbers() {
 
         EditText CustomHomeEdit = (EditText) findViewById(R.id.editCustomHome);
-        CustomHomeEdit.setHint("Custom " + homeCurrency);
+        CustomHomeEdit.setHint(getString(R.string.custom, homeCurrency));
         CustomHomeEdit.setText("");
 
         EditText CustomAwayEdit = (EditText) findViewById(R.id.editCustomAway);
-        CustomAwayEdit.setHint("Custom " + chosenCurrency.getCurrencyCode());
+        CustomAwayEdit.setHint(getString(R.string.custom, chosenCurrency.getCurrencyCode()));
         CustomAwayEdit.setText("");
 
         DecimalFormat precision = new DecimalFormat("0.00");
@@ -276,37 +276,38 @@ public class MainActivity extends AppCompatActivity
         home4.setTag(35);
         home5.setTag(50);
 
+        // TODO change away tags based on rate.  If rate is high, raise convert steps (tags)
         away11.setTag(1);
         away12.setTag(5);
         away13.setTag(20);
         away14.setTag(35);
         away15.setTag(50);
 
-        home1.setText(home1.getTag() + " " + homeCurrency);
-        home2.setText(home2.getTag() + " " + homeCurrency);
-        home3.setText(home3.getTag() + " " + homeCurrency);
-        home4.setText(home4.getTag() + " " + homeCurrency);
-        home5.setText(home5.getTag() + " " + homeCurrency);
-        home11.setText(precision.format((int)away11.getTag() / chosenCurrency.getRate()) + " " + homeCurrency);
-        home12.setText(precision.format((int)away12.getTag() / chosenCurrency.getRate()) + " " + homeCurrency);
-        home13.setText(precision.format((int)away13.getTag() / chosenCurrency.getRate()) + " " + homeCurrency);
-        home14.setText(precision.format((int)away14.getTag() / chosenCurrency.getRate()) + " " + homeCurrency);
-        home15.setText(precision.format((int)away15.getTag() / chosenCurrency.getRate()) + " " + homeCurrency);
+        home1.setText(getString(R.string.currencyvalue, home1.getTag(), homeCurrency));
+        home2.setText(getString(R.string.currencyvalue, home2.getTag(), homeCurrency));
+        home3.setText(getString(R.string.currencyvalue, home3.getTag(), homeCurrency));
+        home4.setText(getString(R.string.currencyvalue, home4.getTag(), homeCurrency));
+        home5.setText(getString(R.string.currencyvalue, home5.getTag(), homeCurrency));
+        home11.setText(getString(R.string.currencyvalue, precision.format((int)away11.getTag() / chosenCurrency.getRate()), homeCurrency));
+        home12.setText(getString(R.string.currencyvalue, precision.format((int)away12.getTag() / chosenCurrency.getRate()), homeCurrency));
+        home13.setText(getString(R.string.currencyvalue, precision.format((int)away13.getTag() / chosenCurrency.getRate()), homeCurrency));
+        home14.setText(getString(R.string.currencyvalue, precision.format((int)away14.getTag() / chosenCurrency.getRate()), homeCurrency));
+        home15.setText(getString(R.string.currencyvalue, precision.format((int)away15.getTag() / chosenCurrency.getRate()), homeCurrency));
 
-        away1.setText(precision.format((int)home1.getTag() * chosenCurrency.getRate()) + " " + chosenCurrency.getCurrencyCode());
-        away2.setText(precision.format((int)home2.getTag() * chosenCurrency.getRate()) + " " + chosenCurrency.getCurrencyCode());
-        away3.setText(precision.format((int)home3.getTag() * chosenCurrency.getRate()) + " " + chosenCurrency.getCurrencyCode());
-        away4.setText(precision.format((int)home4.getTag() * chosenCurrency.getRate()) + " " + chosenCurrency.getCurrencyCode());
-        away5.setText(precision.format((int)home5.getTag() * chosenCurrency.getRate()) + " " + chosenCurrency.getCurrencyCode());
-        away11.setText(away11.getTag() + " " + chosenCurrency.getCurrencyCode());
-        away12.setText(away12.getTag() + " " + chosenCurrency.getCurrencyCode());
-        away13.setText(away13.getTag() + " " + chosenCurrency.getCurrencyCode());
-        away14.setText(away14.getTag() + " " + chosenCurrency.getCurrencyCode());
-        away15.setText(away15.getTag() + " " + chosenCurrency.getCurrencyCode());
+        away1.setText(getString(R.string.currencyvalue, precision.format((int)home1.getTag() * chosenCurrency.getRate()), chosenCurrency.getCurrencyCode()));
+        away2.setText(getString(R.string.currencyvalue, precision.format((int)home2.getTag() * chosenCurrency.getRate()), chosenCurrency.getCurrencyCode()));
+        away3.setText(getString(R.string.currencyvalue, precision.format((int)home3.getTag() * chosenCurrency.getRate()), chosenCurrency.getCurrencyCode()));
+        away4.setText(getString(R.string.currencyvalue, precision.format((int)home4.getTag() * chosenCurrency.getRate()), chosenCurrency.getCurrencyCode()));
+        away5.setText(getString(R.string.currencyvalue, precision.format((int)home5.getTag() * chosenCurrency.getRate()), chosenCurrency.getCurrencyCode()));
+        away11.setText(getString(R.string.currencyvalue, away11.getTag(), chosenCurrency.getCurrencyCode()));
+        away12.setText(getString(R.string.currencyvalue, away12.getTag(), chosenCurrency.getCurrencyCode()));
+        away13.setText(getString(R.string.currencyvalue, away13.getTag(), chosenCurrency.getCurrencyCode()));
+        away14.setText(getString(R.string.currencyvalue, away14.getTag(), chosenCurrency.getCurrencyCode()));
+        away15.setText(getString(R.string.currencyvalue, away15.getTag(), chosenCurrency.getCurrencyCode()));
     }
 
     private void populateCountries(){
-        String csv = getString(R.string.countrymappingCSV);
+        String csv = getString(R.string.countryMappingCSV);
         String[] line = csv.split("\n");
         for(int i=1; i<line.length; i++){  // skip headers row[0]
             String[] RowData = line[i].split(",");
@@ -319,7 +320,7 @@ public class MainActivity extends AppCompatActivity
      * Get ISO 3166-1 alpha-2 country code for this device (or null if not available)
      * @param context Context reference to get the TelephonyManager instance from
      */
-    public Boolean inHomeCountry(Context context) {
+    private Boolean inHomeCountry(Context context) {
         try {
 
             final TelephonyManager tm = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
@@ -327,7 +328,7 @@ public class MainActivity extends AppCompatActivity
 
             if (simCountry != null && simCountry.length() == 2) { // SIM country code is available
 
-                simCountry = simCountry.toUpperCase(Locale.US);
+                simCountry = simCountry.toUpperCase(Locale.UK);
                 userSIMCountry = new Country(simCountry);
                 Log.d("PLACE", "SIM country: " + simCountry);
 
@@ -338,7 +339,7 @@ public class MainActivity extends AppCompatActivity
                 String networkCountry = tm.getNetworkCountryIso();
                 if (networkCountry != null && networkCountry.length() == 2) { // network country code is available
 
-                    networkCountry = networkCountry.toUpperCase(Locale.US);
+                    networkCountry = networkCountry.toUpperCase(Locale.UK);
                     userNetworkCountry = new Country(networkCountry);
                     Log.d("PLACE", "Network country: " + networkCountry);
 
