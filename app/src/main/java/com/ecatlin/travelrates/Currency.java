@@ -10,6 +10,8 @@ import java.util.Locale;
 class Currency{
     private String mCurrencyCode;
     private double mRate;
+    private String mCurrencyName;
+    private Integer mFlagImageId;
 
     // TODO add country name(s)
 
@@ -30,15 +32,23 @@ class Currency{
             return String.format("%s",mRate);
     }
 
-    public void setRate(double rate) {
-        this.mRate = rate;
-    }
-
     String getCurrencyCode() {
         return mCurrencyCode;
     }
 
-    public void setCurrency(String currency) {
-        this.mCurrencyCode = currency;
+    public Integer getFlag(){
+        return mFlagImageId;
     }
+
+    public String getCurrencyName(){
+        return mCurrencyName;
+    }
+
+    public void addFlagAndName(){
+        // search images and text for this currency and add them to the local variables
+
+
+
+    }
+
 }

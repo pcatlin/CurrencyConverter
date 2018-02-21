@@ -19,7 +19,9 @@
             <Spinner
                 android:id="@+id/convertTo"
                 android:layout_width="100dp"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                >
+                <!-- android:dropDownWidth="300dp" -->
             </Spinner>
             <TextView
                 android:id="@+id/rateText"

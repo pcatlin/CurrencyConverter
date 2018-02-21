@@ -105,7 +105,10 @@ class CurrencyRates {
                 String currencyCode = keysIterator.next();
                 double rate = rates.getDouble(currencyCode);
 
-                if(!currencyCode.equals("") && rate!=0) this.Add(new Currency(currencyCode, rate));
+                if(!currencyCode.equals("") && rate!=0){
+                    this.Add(new Currency(currencyCode, rate));
+                    // match currency
+                }
             }
 
             // TODO enable custom rate option

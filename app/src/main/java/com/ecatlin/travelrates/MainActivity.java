@@ -1,17 +1,14 @@
 package com.ecatlin.travelrates;
 
 import android.app.LoaderManager.LoaderCallbacks;
-import android.content.Context;
 import android.content.Loader;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.telephony.TelephonyManager;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -21,8 +18,6 @@ import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.MobileAds;
 
 import java.text.DecimalFormat;
-import java.util.ArrayList;
-import java.util.Locale;
 
 
 
@@ -36,8 +31,8 @@ public class MainActivity extends AppCompatActivity
     private int chosenRateIndex;
     private Currency chosenCurrency;
     private String homeCurrency = "GBP";
-    private ArrayList<Country> Countries = new ArrayList<>();
-    private Country userNetworkCountry, userSIMCountry;
+    //private ArrayList<Country> Countries = new ArrayList<>();
+    //private Country userNetworkCountry, userSIMCountry;
     private Cache userCache, ratesCache;
 
 
@@ -55,9 +50,8 @@ public class MainActivity extends AppCompatActivity
         ratesCache = new Cache("rates");
         userCache = new Cache("prefs");
 
-        populateCountries();
-
-        inHomeCountry(this);
+        //populateCountries();
+        //inHomeCountry(this);
 
         getCurrencyRates();
 
@@ -69,10 +63,9 @@ public class MainActivity extends AppCompatActivity
         // populate the spinner/dropdown box with currencies
         Spinner spinner = (Spinner) findViewById(R.id.convertTo);
 
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, cr.mCurrencyCodes);
+        SpinnerAdapter adapter = new SpinnerAdapter(this, R.layout.spinner_row, R.id.currencycode, cr.mCurrencies);
 
         // Specify the layout to use when the list of choices appears
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(adapter);
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -367,6 +360,7 @@ public class MainActivity extends AppCompatActivity
         away15.setText(getString(R.string.currencyvalue, away15.getTag(), chosenCurrency.getCurrencyCode()));
     }
 
+    /*
     private void populateCountries(){
         String csv = getString(R.string.countryMappingCSV);
         String[] line = csv.split("\n");
@@ -375,12 +369,14 @@ public class MainActivity extends AppCompatActivity
             Countries.add(new Country(RowData[0],RowData[1],RowData[2],RowData[3]));
         }
     }
+    */
 
 
     /**
      * Get ISO 3166-1 alpha-2 country code for this device (or null if not available)
      * @param context Context reference to get the TelephonyManager instance from
      */
+    /*
     private Boolean inHomeCountry(Context context) {
         try {
 
@@ -413,5 +409,6 @@ public class MainActivity extends AppCompatActivity
         return null;
 
     }
+    */
 
 }
