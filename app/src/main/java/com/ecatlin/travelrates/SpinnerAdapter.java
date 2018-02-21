@@ -33,10 +33,12 @@ public class SpinnerAdapter extends ArrayAdapter<Currency> {
         View itemView=inflater.inflate(groupid,parent,false);
         ImageView imageView=(ImageView)itemView.findViewById(R.id.flag);
         imageView.setImageResource(list.get(position).getFlag());
-        TextView textView=(TextView)itemView.findViewById(R.id.currencycode);
-        textView.setText(list.get(position).getCurrencyCode());
-        TextView textView2=(TextView)itemView.findViewById(R.id.currencyname);
-        textView2.setText(list.get(position).getCurrencyName());
+        TextView code=(TextView)itemView.findViewById(R.id.currencycode);
+        code.setText(list.get(position).getCurrencyCode());
+        TextView name=(TextView)itemView.findViewById(R.id.currencyname);
+        name.setText(list.get(position).getCurrencyNameId());
+        TextView rate=(TextView)itemView.findViewById(R.id.rateText);
+        rate.setText(list.get(position).getStringRate());
         return itemView;
     }
 
