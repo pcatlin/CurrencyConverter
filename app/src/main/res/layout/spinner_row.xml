@@ -12,11 +12,11 @@
 
         <ImageView
             android:id="@+id/flag"
-            android:layout_width="wrap_content"
+            android:layout_width="75dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:layout_marginLeft="5dp"
-            tools:src="@drawable/us" />
+            tools:src="@drawable/eur" />
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -36,7 +36,7 @@
                     android:paddingBottom="2dp"
                     android:paddingLeft="5dp"
                     android:paddingTop="2dp"
-                    android:textSize="20dp"
+                    android:textSize="20sp"
                     tools:text="EUR"></TextView>
 
                 <TextView

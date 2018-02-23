@@ -12,14 +12,14 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 /**
+ * Deals with custom spinner
  * Created by paul on 21/02/2018.
  */
 
 public class SpinnerAdapter extends ArrayAdapter<Currency> {
 
-    int groupid;
-    Activity context;
-    ArrayList<Currency> list;
+    private int groupid;
+    private ArrayList<Currency> list;
     LayoutInflater inflater;
 
     public SpinnerAdapter(Activity context, int groupid, int id, ArrayList<Currency> list){
@@ -38,7 +38,7 @@ public class SpinnerAdapter extends ArrayAdapter<Currency> {
         TextView name=(TextView)itemView.findViewById(R.id.currencyname);
         name.setText(list.get(position).getCurrencyNameId());
         TextView rate=(TextView)itemView.findViewById(R.id.rateText);
-        rate.setText(list.get(position).getStringRate());
+//        rate.setText(list.get(position).getStringRate());
         return itemView;
     }
 
