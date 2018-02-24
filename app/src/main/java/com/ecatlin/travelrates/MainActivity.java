@@ -1,13 +1,21 @@
 package com.ecatlin.travelrates;
 
+import android.app.AlertDialog;
 import android.app.LoaderManager.LoaderCallbacks;
+import android.content.DialogInterface;
 import android.content.Loader;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.KeyEvent;
+import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.Spinner;
@@ -34,10 +42,28 @@ public class MainActivity extends AppCompatActivity
     //private ArrayList<Country> Countries = new ArrayList<>();
     //private Country userNetworkCountry, userSIMCountry;
     private Cache userCache, ratesCache;
+    private double customRate=1;
+    SpinnerAdapter spinnerAdapter;
 
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu, menu);
+        return true;
+    }
 
-    // TODO settings dialog to change home currency
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle item selection
+        switch (item.getItemId()) {
+            case R.id.setCustom:
+                showEditCustomRateDialog();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,19 +89,23 @@ public class MainActivity extends AppCompatActivity
         // populate the spinner/dropdown box with currencies
         Spinner spinner = (Spinner) findViewById(R.id.convertTo);
 
-        SpinnerAdapter adapter = new SpinnerAdapter(this, R.layout.spinner_row, R.id.currencycode, cr.mCurrencies);
+        spinnerAdapter = new SpinnerAdapter(this, R.layout.spinner_row, R.id.currencycode, cr.mCurrencies);
 
         // Specify the layout to use when the list of choices appears
-        spinner.setAdapter(adapter);
+        spinner.setAdapter(spinnerAdapter);
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
 
                 chosenRateIndex = position; // when currency is changed store the index position
 
-                // TODO when custom rate is chosen prompt for rate and set the rate in the variable
-
                 chosenCurrency=cr.mCurrencies.get(chosenRateIndex);
+
+                if(chosenCurrency.getCurrencyCode()==getString(R.string.customRateCode) && chosenCurrency.getRate()==1){
+                    // custom rate chosen
+                    showEditCustomRateDialog();
+
+                }
 
                 // set rate textview
                 TextView rate = (TextView)findViewById(R.id.rateText);
@@ -161,6 +191,7 @@ public class MainActivity extends AppCompatActivity
         }
 
 
+
     }
 
     @Override
@@ -222,6 +253,9 @@ public class MainActivity extends AppCompatActivity
 
         cr = new CurrencyRates();
         cr.parseJSONrates(rates);
+
+        customRate = 1;
+        cr.Add(new Currency(getString(R.string.customRateCode), customRate));  // custom rate
 
         TextView date = (TextView) findViewById(R.id.updatedText);
         date.setText(cr.getDateUpdated());
@@ -358,6 +392,67 @@ public class MainActivity extends AppCompatActivity
         away13.setText(getString(R.string.currencyvalue, away13.getTag(), chosenCurrency.getCurrencyCode()));
         away14.setText(getString(R.string.currencyvalue, away14.getTag(), chosenCurrency.getCurrencyCode()));
         away15.setText(getString(R.string.currencyvalue, away15.getTag(), chosenCurrency.getCurrencyCode()));
+    }
+
+    public void showEditCustomRateDialog(){
+
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
+        LayoutInflater inflater = this.getLayoutInflater();
+        final View dialogView = inflater.inflate(R.layout.customrate_dialog, null);
+        dialogBuilder.setView(dialogView);
+
+
+        final EditText edt = (EditText) dialogView.findViewById(R.id.UserCustomRate);
+
+        dialogBuilder.setTitle(R.string.setCustomRate);
+        dialogBuilder.setMessage(R.string.customRateDesc);
+        dialogBuilder.setPositiveButton("Done", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int whichButton) {
+                setCustomRate(Double.parseDouble(edt.getText().toString()));
+            }
+        });
+
+        dialogBuilder.setOnKeyListener(new DialogInterface.OnKeyListener() {
+
+            @Override
+            public boolean onKey(DialogInterface dialog, int keyCode, KeyEvent event) {
+                if(keyCode==KeyEvent.KEYCODE_ENTER) {
+
+                    setCustomRate(Double.parseDouble(edt.getText().toString()));
+                    dialog.dismiss();
+                    return true;
+                }
+                return false;
+            }
+        });
+
+        dialogBuilder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int whichButton) {
+                //pass
+            }
+        });
+        AlertDialog b = dialogBuilder.create();
+        b.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
+        b.show();
+    }
+
+
+    void setCustomRate(double customRate){
+
+        cr.setCustomRate(customRate);
+
+        // set spinner index to be custom rate
+        Spinner spinner = (Spinner) findViewById(R.id.convertTo);
+        spinnerAdapter.notifyDataSetChanged();
+        int lastItemIndex = spinner.getCount()-1;
+        spinner.setSelection(lastItemIndex);
+
+        chosenCurrency=cr.mCurrencies.get(lastItemIndex);
+
+        TextView rate = (TextView)findViewById(R.id.rateText);
+        rate.setText(getString(R.string.rate, chosenCurrency.getStringRate()));
+
+        updateNumbers();
     }
 
     /*

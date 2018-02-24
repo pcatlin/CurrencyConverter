@@ -17,8 +17,8 @@ android {
             minSdkVersion 21
             applicationId 'com.ecatlin.travelrates'
             targetSdkVersion 25
-            versionCode 4
-            versionName '0.40'
+            versionCode 5
+            versionName '0.50'
             versionNameSuffix ''
             dimension "tier"
         }
@@ -26,8 +26,8 @@ android {
             minSdkVersion 21
             applicationId 'com.ecatlin.travelratespro'
             targetSdkVersion 25
-            versionCode 4
-            versionName '0.40'
+            versionCode 5
+            versionName '0.50'
             versionNameSuffix ''
             dimension "tier"
         }

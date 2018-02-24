@@ -15,7 +15,7 @@ class Currency{
 
     // TODO add country name(s)
 
-    Currency(String currency, double rate) {
+    public Currency(String currency, double rate) {
         mCurrencyCode = currency;
         mRate = rate;
 
@@ -149,6 +149,8 @@ class Currency{
             case "ZAR": mCurrencyNameId = R.string.ZAR;
                 mFlagImageId = R.drawable.zar;
                 break;
+            case "?": mCurrencyNameId = R.string.customRateName;
+                mFlagImageId = R.drawable.unknownflag;
 
         }
 

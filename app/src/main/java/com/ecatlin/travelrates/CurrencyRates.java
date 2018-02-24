@@ -35,7 +35,7 @@ class CurrencyRates {
         mCurrencyCodes = new ArrayList<>();
     }
 
-    private void Add(Currency C){
+    void Add(Currency C){
         mCurrencies.add(C);
         mCurrencyCodes.add(C.getCurrencyCode());
     }
@@ -46,6 +46,11 @@ class CurrencyRates {
 
     void setConvertTo(String mConvertTo) {
         this.mConvertTo = mConvertTo;
+    }
+
+    void setCustomRate(double rate){
+        mCurrencies.remove(mCurrencies.size() - 1); // remove last item (previous custom rate)
+        mCurrencies.add(new Currency("?",rate));
     }
 
     String getDateUpdated() {
@@ -110,9 +115,6 @@ class CurrencyRates {
                     // match currency
                 }
             }
-
-            // TODO enable custom rate option
-            //cr.Add(new Currency("?", 1));  // custom rate
 
             //Log.d("parseJSON", "Parsed JSON dated: " + cr.getDateUpdated());
             return true;

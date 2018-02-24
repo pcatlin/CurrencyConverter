@@ -2,6 +2,7 @@ package com.ecatlin.travelrates;
 
 import android.app.Activity;
 import android.content.Context;
+import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -40,6 +41,16 @@ public class SpinnerAdapter extends ArrayAdapter<Currency> {
         TextView rate=(TextView)itemView.findViewById(R.id.rateText);
 //        rate.setText(list.get(position).getStringRate());
         return itemView;
+    }
+
+    @Override
+    public int getPosition(@Nullable Currency item) {
+        return super.getPosition(item);
+    }
+
+    @Override
+    public void notifyDataSetChanged() {
+        super.notifyDataSetChanged();
     }
 
     public View getDropDownView(int position, View convertView, ViewGroup parent){
