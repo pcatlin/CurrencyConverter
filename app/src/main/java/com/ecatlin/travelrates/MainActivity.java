@@ -101,7 +101,7 @@ public class MainActivity extends AppCompatActivity
 
                 chosenCurrency=cr.mCurrencies.get(chosenRateIndex);
 
-                if(chosenCurrency.getCurrencyCode()==getString(R.string.customRateCode) && chosenCurrency.getRate()==1){
+                if(chosenCurrency.getCurrencyCode().equals(getString(R.string.customRateCode)) && chosenCurrency.getRate()==1.0){
                     // custom rate chosen
                     showEditCustomRateDialog();
 
@@ -171,12 +171,6 @@ public class MainActivity extends AppCompatActivity
 
         if (BuildConfig.FLAVOR.equals("ads")) {
 
-            /*
-            admob app id        ca-app-pub-9612116433207542~2023116000
-            admob ad unit id    ca-app-pub-9612116433207542/1858151398
-            test banner id      ca-app-pub-3940256099942544/6300978111
-            */
-
             MobileAds.initialize(this, "ca-app-pub-9612116433207542~2023116000");
 
             AdRequest adRequest = new AdRequest.Builder()
@@ -224,7 +218,7 @@ public class MainActivity extends AppCompatActivity
 
     private void getCurrencyRates(){
 
-        String tempJSON = "{\"base\":\"GBP\",\"date\":\"2017-03-10\",\"rates\":{\"AUD\":1.6155,\"BGN\":2.2416,\"BRL\":3.8618,\"CAD\":1.6415,\"CHF\":1.2313,\"CNY\":8.4053,\"CZK\":30.97,\"DKK\":8.5193,\"HKD\":9.4403,\"HRK\":8.5032,\"HUF\":357.9,\"IDR\":16259.0,\"ILS\":4.4798,\"INR\":80.999,\"JPY\":140.31,\"KRW\":1405.5,\"MXN\":24.032,\"MYR\":5.4133,\"NOK\":10.476,\"NZD\":1.7591,\"PHP\":61.067,\"PLN\":4.9581,\"RON\":5.2138,\"RUB\":71.858,\"SEK\":10.977,\"SGD\":1.7239,\"THB\":43.044,\"TRY\":4.5617,\"USD\":1.2156,\"ZAR\":16.124,\"EUR\":1.1461}}";
+        String tempJSON = "{\"base\":\"GBP\",\"date\":\"2017-03-10\",\"rates\":{\"AUD\":1.6155,\"BGN\":2.2416,\"BRL\":3.8618,\"CAD\":1.6415,\"CHF\":1.2313,\"CNY\":8.4053,\"CZK\":30.97,\"DKK\":8.5193,\"EUR\":1.1461,\"HKD\":9.4403,\"HRK\":8.5032,\"HUF\":357.9,\"IDR\":16259.0,\"ILS\":4.4798,\"INR\":80.999,\"JPY\":140.31,\"KRW\":1405.5,\"MXN\":24.032,\"MYR\":5.4133,\"NOK\":10.476,\"NZD\":1.7591,\"PHP\":61.067,\"PLN\":4.9581,\"RON\":5.2138,\"RUB\":71.858,\"SEK\":10.977,\"SGD\":1.7239,\"THB\":43.044,\"TRY\":4.5617,\"USD\":1.2156,\"ZAR\":16.124}}";
 
         // read cache file
         String rates = ratesCache.read(this);
@@ -273,7 +267,9 @@ public class MainActivity extends AppCompatActivity
         CustomAwayEdit.setHint(getString(R.string.custom, chosenCurrency.getCurrencyCode()));
         CustomAwayEdit.setText("");
 
-        DecimalFormat precision = new DecimalFormat("0.00");
+        DecimalFormat precision;
+        if(chosenCurrency.getRate()<10) precision = new DecimalFormat("0.00");
+        else precision = new DecimalFormat("0");
 
         TextView home1 = (TextView) findViewById(R.id.home1);
         TextView home2 = (TextView) findViewById(R.id.home2);
@@ -444,15 +440,15 @@ public class MainActivity extends AppCompatActivity
         // set spinner index to be custom rate
         Spinner spinner = (Spinner) findViewById(R.id.convertTo);
         spinnerAdapter.notifyDataSetChanged();
-        int lastItemIndex = spinner.getCount()-1;
+        int lastItemIndex = spinnerAdapter.getCount()-1;
         spinner.setSelection(lastItemIndex);
 
         chosenCurrency=cr.mCurrencies.get(lastItemIndex);
 
+        updateNumbers();
+
         TextView rate = (TextView)findViewById(R.id.rateText);
         rate.setText(getString(R.string.rate, chosenCurrency.getStringRate()));
-
-        updateNumbers();
     }
 
     /*
