@@ -15,7 +15,8 @@
             android:layout_width="75dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
-            android:layout_marginLeft="5dp"
+            android:layout_marginStart="5dp"
+            android:contentDescription="@string/flag"
             tools:src="@drawable/eur" />
 
         <LinearLayout
@@ -34,10 +35,10 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
                     android:paddingBottom="2dp"
-                    android:paddingLeft="5dp"
+                    android:paddingStart="5dp"
                     android:paddingTop="2dp"
                     android:textSize="20sp"
-                    tools:text="EUR"></TextView>
+                    tools:text="EUR"/>
 
             </LinearLayout>
 
@@ -47,9 +48,9 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:paddingBottom="2dp"
-                android:paddingLeft="5dp"
+                android:paddingStart="5dp"
                 android:paddingTop="2dp"
-                tools:text="European Euros"></TextView>
+                tools:text="European Euros"/>
         </LinearLayout>
     </LinearLayout>
 

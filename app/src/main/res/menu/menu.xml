@@ -8,6 +8,6 @@
         android:checkable="false"
         android:checked="false"
         android:enabled="true"
-        android:title="Set custom rate"
+        android:title="@string/setCustomRate"
         app:showAsAction="ifRoom|withText" />
 </menu>

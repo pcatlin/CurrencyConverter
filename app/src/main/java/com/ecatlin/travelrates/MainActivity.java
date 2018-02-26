@@ -42,7 +42,6 @@ public class MainActivity extends AppCompatActivity
     //private ArrayList<Country> Countries = new ArrayList<>();
     //private Country userNetworkCountry, userSIMCountry;
     private Cache userCache, ratesCache;
-    private double customRate=1.0;
     SpinnerAdapter spinnerAdapter;
 
 
@@ -248,7 +247,7 @@ public class MainActivity extends AppCompatActivity
         cr = new CurrencyRates();
         cr.parseJSONrates(rates);
 
-        cr.Add(new Currency(getString(R.string.customRateCode), customRate));  // custom rate
+        cr.Add(new Currency(getString(R.string.customRateCode), 1.0));  // custom rate
 
         TextView date = (TextView) findViewById(R.id.updatedText);
         date.setText(cr.getDateUpdated());
@@ -407,7 +406,7 @@ public class MainActivity extends AppCompatActivity
 
         dialogBuilder.setTitle(R.string.setCustomRate);
         dialogBuilder.setMessage(R.string.customRateDesc);
-        dialogBuilder.setPositiveButton("Done", new DialogInterface.OnClickListener() {
+        dialogBuilder.setPositiveButton(getString(R.string.done), new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int whichButton) {
                 String input = edt.getText().toString();
                 if(input.equals("")) input="1"; // if blank, reset to 1
@@ -432,7 +431,7 @@ public class MainActivity extends AppCompatActivity
             }
         });
 
-        dialogBuilder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+        dialogBuilder.setNegativeButton(getString(R.string.cancel), new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int whichButton) {
                 //pass
             }

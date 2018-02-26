@@ -12,11 +12,14 @@
 
     <string name="setCustomRate">Set custom rate</string>
     <string name="customRateDesc">Enter any exchange rate that you like.  Perhaps the rate that you paid when you exchanged your cash?</string>
-    <string name="ok">OK</string>
+    <string name="customRateTip">1.5</string>
+    <string name="done">Done</string>
     <string name="cancel">Cancel</string>
 
-    <string name="customRateCode">?</string>
+    <string name="customRateCode">\?</string>
     <string name="customRateName">Your custom rate</string>
+
+    <string name="flag">Flag</string>
 
     <string name="USD">US dollar</string>
     <string name="JPY">Japanese yen</string>

@@ -10,6 +10,6 @@
         android:layout_gravity="center"
         android:textAlignment="center"
         android:inputType="numberDecimal"
-        android:hint="1.5"/>
+        android:hint="@string/customRateTip"/>
 
 </LinearLayout>
