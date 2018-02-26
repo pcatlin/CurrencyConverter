@@ -53,6 +53,12 @@ class CurrencyRates {
         mCurrencies.add(new Currency("?",rate));
     }
 
+    String getCustomRateString(){
+        Currency custom = mCurrencies.get(mCurrencies.size() - 1);
+        if(custom.getCurrencyCode().equals("?")) return custom.getStringRate();
+        else return "";
+    }
+
     String getDateUpdated() {
         SimpleDateFormat df=new SimpleDateFormat("dd-MM-yyyy", Locale.UK);
         return df.format(mDateUpdated);

@@ -19,10 +19,17 @@
             <Spinner
                 android:id="@+id/convertTo"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:layout_weight="100">
                 <!-- android:dropDownWidth="300dp" -->
             </Spinner>
-
+            <TextView
+                android:id="@+id/rateText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_weight="1"
+                tools:text="Rate: 1.1111"/>
         </LinearLayout>
 
         <LinearLayout

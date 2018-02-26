@@ -42,7 +42,7 @@ public class MainActivity extends AppCompatActivity
     //private ArrayList<Country> Countries = new ArrayList<>();
     //private Country userNetworkCountry, userSIMCountry;
     private Cache userCache, ratesCache;
-    private double customRate=1;
+    private double customRate=1.0;
     SpinnerAdapter spinnerAdapter;
 
 
@@ -248,7 +248,6 @@ public class MainActivity extends AppCompatActivity
         cr = new CurrencyRates();
         cr.parseJSONrates(rates);
 
-        customRate = 1;
         cr.Add(new Currency(getString(R.string.customRateCode), customRate));  // custom rate
 
         TextView date = (TextView) findViewById(R.id.updatedText);
@@ -399,12 +398,20 @@ public class MainActivity extends AppCompatActivity
 
 
         final EditText edt = (EditText) dialogView.findViewById(R.id.UserCustomRate);
+        String previousCustom = cr.getCustomRateString();
+        if(!previousCustom.equals("1")){
+            int length = previousCustom.length();
+            edt.setText(previousCustom);
+            edt.setSelection(length);
+        }
 
         dialogBuilder.setTitle(R.string.setCustomRate);
         dialogBuilder.setMessage(R.string.customRateDesc);
         dialogBuilder.setPositiveButton("Done", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int whichButton) {
-                setCustomRate(Double.parseDouble(edt.getText().toString()));
+                String input = edt.getText().toString();
+                if(input.equals("")) input="1"; // if blank, reset to 1
+                setCustomRate(Double.parseDouble(input));
             }
         });
 
@@ -414,7 +421,10 @@ public class MainActivity extends AppCompatActivity
             public boolean onKey(DialogInterface dialog, int keyCode, KeyEvent event) {
                 if(keyCode==KeyEvent.KEYCODE_ENTER) {
 
-                    setCustomRate(Double.parseDouble(edt.getText().toString()));
+                    String input = edt.getText().toString();
+                    if(input.equals("")) input="1"; // if blank, reset to 1
+                    setCustomRate(Double.parseDouble(input));
+
                     dialog.dismiss();
                     return true;
                 }
@@ -433,13 +443,13 @@ public class MainActivity extends AppCompatActivity
     }
 
 
-    void setCustomRate(double customRate){
+    void setCustomRate(double CustomRate){
 
-        cr.setCustomRate(customRate);
+        cr.setCustomRate(CustomRate);
 
         // set spinner index to be custom rate
         Spinner spinner = (Spinner) findViewById(R.id.convertTo);
-        spinnerAdapter.notifyDataSetChanged();
+        //spinnerAdapter.notifyDataSetChanged();
         int lastItemIndex = spinnerAdapter.getCount()-1;
         spinner.setSelection(lastItemIndex);
 
