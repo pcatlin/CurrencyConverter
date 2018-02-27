@@ -151,6 +151,7 @@ class Currency{
                 break;
             case "?": mCurrencyNameId = R.string.customRateName;
                 mFlagImageId = R.drawable.unknownflag;
+                break;
 
         }
 

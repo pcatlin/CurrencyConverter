@@ -28,15 +28,10 @@ import com.google.android.gms.ads.MobileAds;
 import java.text.DecimalFormat;
 
 
-
-
-
 public class MainActivity extends AppCompatActivity
         implements LoaderCallbacks<CurrencyRates>{
 
     private AdView mAdView;
-    private CurrencyRates cr;
-    private int chosenRateIndex;
     private Currency chosenCurrency;
     private String homeCurrency = "GBP";
     //private ArrayList<Country> Countries = new ArrayList<>();
@@ -78,17 +73,16 @@ public class MainActivity extends AppCompatActivity
         //populateCountries();
         //inHomeCountry(this);
 
-        getCurrencyRates();
+        CurrencyRates rates;
+        rates = getCurrencyRates();
 
         // TODO remember last used currency
-
-        chosenCurrency=cr.mCurrencies.get(0);
+        chosenCurrency=rates.mCurrencies.get(0);
 
         // TODO move spinner loading to function
         // populate the spinner/dropdown box with currencies
-        Spinner spinner = (Spinner) findViewById(R.id.convertTo);
-
-        spinnerAdapter = new SpinnerAdapter(this, R.layout.spinner_row, R.id.currencycode, cr.mCurrencies);
+        final Spinner spinner = (Spinner) findViewById(R.id.convertTo);
+        spinnerAdapter = new SpinnerAdapter(this, R.layout.spinner_row, R.id.currencycode, rates);
 
         // Specify the layout to use when the list of choices appears
         spinner.setAdapter(spinnerAdapter);
@@ -96,14 +90,11 @@ public class MainActivity extends AppCompatActivity
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
 
-                chosenRateIndex = position; // when currency is changed store the index position
-
-                chosenCurrency=cr.mCurrencies.get(chosenRateIndex);
+                chosenCurrency=spinnerAdapter.getCurrency(position);
 
                 if(chosenCurrency.getCurrencyCode().equals(getString(R.string.customRateCode)) && chosenCurrency.getRate()==1.0){
                     // custom rate chosen
                     showEditCustomRateDialog();
-
                 }
 
                 // set rate textview
@@ -121,6 +112,10 @@ public class MainActivity extends AppCompatActivity
 
             }
         });
+
+
+        TextView rate = (TextView)findViewById(R.id.rateText);
+        rate.setText(getString(R.string.rate, chosenCurrency.getStringRate()));
 
 
         final EditText editCustomHome = (EditText) findViewById(R.id.editCustomHome);
@@ -196,8 +191,12 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void onLoadFinished(Loader<CurrencyRates> loader, CurrencyRates downloadedRates) {
 
+        Log.d("test","help!");
         if (downloadedRates != null) {
-            cr = downloadedRates;
+
+            // TODO remember previous custom rate [1]
+            downloadedRates.Add(new Currency("?",1.0));
+            spinnerAdapter.updateRates(downloadedRates.mCurrencies);
 
             ratesCache.write(this, downloadedRates.getJSON());
 
@@ -209,13 +208,14 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void onLoaderReset(Loader<CurrencyRates> loader) {
         // Loader reset, so we can clear out our existing data.
-        cr.Empty();
+        //spinnerAdapter.rates.Empty();
+        ////// hmmmmmmmmm
     }
 
 
 
 
-    private void getCurrencyRates(){
+    private CurrencyRates getCurrencyRates(){
 
         String tempJSON = "{\"base\":\"GBP\",\"date\":\"2017-03-10\",\"rates\":{\"AUD\":1.6155,\"BGN\":2.2416,\"BRL\":3.8618,\"CAD\":1.6415,\"CHF\":1.2313,\"CNY\":8.4053,\"CZK\":30.97,\"DKK\":8.5193,\"EUR\":1.1461,\"HKD\":9.4403,\"HRK\":8.5032,\"HUF\":357.9,\"IDR\":16259.0,\"ILS\":4.4798,\"INR\":80.999,\"JPY\":140.31,\"KRW\":1405.5,\"MXN\":24.032,\"MYR\":5.4133,\"NOK\":10.476,\"NZD\":1.7591,\"PHP\":61.067,\"PLN\":4.9581,\"RON\":5.2138,\"RUB\":71.858,\"SEK\":10.977,\"SGD\":1.7239,\"THB\":43.044,\"TRY\":4.5617,\"USD\":1.2156,\"ZAR\":16.124}}";
 
@@ -244,14 +244,16 @@ public class MainActivity extends AppCompatActivity
             Log.d("getRates","Recent cache file found. Cache age: " + fileAge + " Using its rates only.");
         }
 
-        cr = new CurrencyRates();
+        CurrencyRates cr = new CurrencyRates();
         cr.parseJSONrates(rates);
 
+        // TODO remember previous custom rate [1]
         cr.Add(new Currency(getString(R.string.customRateCode), 1.0));  // custom rate
 
         TextView date = (TextView) findViewById(R.id.updatedText);
         date.setText(cr.getDateUpdated());
 
+        return cr;
     }
 
 
@@ -397,7 +399,7 @@ public class MainActivity extends AppCompatActivity
 
 
         final EditText edt = (EditText) dialogView.findViewById(R.id.UserCustomRate);
-        String previousCustom = cr.getCustomRateString();
+        String previousCustom = spinnerAdapter.rates.getCustomRateString();
         if(!previousCustom.equals("1")){
             int length = previousCustom.length();
             edt.setText(previousCustom);
@@ -434,6 +436,7 @@ public class MainActivity extends AppCompatActivity
         dialogBuilder.setNegativeButton(getString(R.string.cancel), new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int whichButton) {
                 //pass
+
             }
         });
         AlertDialog b = dialogBuilder.create();
@@ -444,15 +447,15 @@ public class MainActivity extends AppCompatActivity
 
     void setCustomRate(double CustomRate){
 
-        cr.setCustomRate(CustomRate);
-
         // set spinner index to be custom rate
         Spinner spinner = (Spinner) findViewById(R.id.convertTo);
-        //spinnerAdapter.notifyDataSetChanged();
+        spinnerAdapter.rates.setCustomRate(CustomRate);
+        spinnerAdapter.notifyDataSetChanged();
+
         int lastItemIndex = spinnerAdapter.getCount()-1;
         spinner.setSelection(lastItemIndex);
 
-        chosenCurrency=cr.mCurrencies.get(lastItemIndex);
+        chosenCurrency=spinnerAdapter.getCurrency(lastItemIndex);
 
         updateNumbers();
 
