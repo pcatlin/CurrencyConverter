@@ -191,8 +191,8 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void onLoadFinished(Loader<CurrencyRates> loader, CurrencyRates downloadedRates) {
 
-        Log.d("test","help!");
-        if (downloadedRates != null) {
+        Log.d("onLoadFinished","Data downloaded");
+        if (downloadedRates.getDateUpdated() != null) {
 
             // TODO remember previous custom rate [1]
             downloadedRates.Add(new Currency("?",1.0));

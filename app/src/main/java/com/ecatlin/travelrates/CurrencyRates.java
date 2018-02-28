@@ -66,8 +66,11 @@ class CurrencyRates {
     }
 
     String getDateUpdated() {
-        SimpleDateFormat df=new SimpleDateFormat("dd-MM-yyyy", Locale.UK);
-        return df.format(mDateUpdated);
+        if(mDateUpdated==null) return null;
+        else{
+            SimpleDateFormat df=new SimpleDateFormat("dd-MM-yyyy", Locale.UK);
+            return df.format(mDateUpdated);
+        }
     }
 
     void Empty(){
