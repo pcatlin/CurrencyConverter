@@ -54,7 +54,6 @@ class CurrencyLoader extends AsyncTaskLoader<CurrencyRates> {
             Log.e("HTTP", "Problem making the HTTP request.", e);
         }
 
-
         CurrencyRates cr = new CurrencyRates();
         cr.parseJSONrates(jsonResponse);
 

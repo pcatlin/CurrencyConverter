@@ -38,8 +38,6 @@ public class SpinnerAdapter extends ArrayAdapter<Currency> {
         code.setText(rates.mCurrencies.get(position).getCurrencyCode());
         TextView name=(TextView)itemView.findViewById(R.id.currencyname);
         name.setText(rates.mCurrencies.get(position).getCurrencyNameId());
-//        TextView rate=(TextView)itemView.findViewById(R.id.rateText);
-//        rate.setText(list.get(position).getStringRate());
         return itemView;
     }
 
@@ -67,6 +65,5 @@ public class SpinnerAdapter extends ArrayAdapter<Currency> {
         this.addAll(newRates);
         notifyDataSetChanged();
     }
-
 
 }

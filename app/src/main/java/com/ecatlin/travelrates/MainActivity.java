@@ -8,7 +8,6 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -27,7 +26,6 @@ import com.google.android.gms.ads.MobileAds;
 
 import java.text.DecimalFormat;
 
-
 public class MainActivity extends AppCompatActivity
         implements LoaderCallbacks<CurrencyRates>{
 
@@ -39,7 +37,6 @@ public class MainActivity extends AppCompatActivity
     private Cache userCache, ratesCache;
     SpinnerAdapter spinnerAdapter;
 
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
@@ -49,7 +46,7 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle item selection
+
         switch (item.getItemId()) {
             case R.id.setCustom:
                 showEditCustomRateDialog();
@@ -63,9 +60,6 @@ public class MainActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        // Get a reference to the LoaderManager, in order to interact with loaders.
-        //LoaderManager loaderManager = getLoaderManager();
 
         ratesCache = new Cache("rates");
         userCache = new Cache("prefs");
@@ -97,7 +91,6 @@ public class MainActivity extends AppCompatActivity
                     showEditCustomRateDialog();
                 }
 
-                // set rate textview
                 TextView rate = (TextView)findViewById(R.id.rateText);
                 rate.setText(getString(R.string.rate, chosenCurrency.getStringRate()));
 
@@ -113,10 +106,8 @@ public class MainActivity extends AppCompatActivity
             }
         });
 
-
         TextView rate = (TextView)findViewById(R.id.rateText);
         rate.setText(getString(R.string.rate, chosenCurrency.getStringRate()));
-
 
         final EditText editCustomHome = (EditText) findViewById(R.id.editCustomHome);
         final EditText editCustomAway = (EditText) findViewById(R.id.editCustomAway);
@@ -178,8 +169,6 @@ public class MainActivity extends AppCompatActivity
             mDivider.setVisibility(View.GONE);
         }
 
-
-
     }
 
     @Override
@@ -191,7 +180,7 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void onLoadFinished(Loader<CurrencyRates> loader, CurrencyRates downloadedRates) {
 
-        Log.d("onLoadFinished","Data downloaded");
+        //Log.d("onLoadFinished","Data downloaded");
         if (downloadedRates.getDateUpdated() != null) {
 
             // TODO remember previous custom rate [1]
@@ -213,16 +202,12 @@ public class MainActivity extends AppCompatActivity
     }
 
 
-
-
     private CurrencyRates getCurrencyRates(){
 
         String tempJSON = "{\"base\":\"GBP\",\"date\":\"2017-03-10\",\"rates\":{\"AUD\":1.6155,\"BGN\":2.2416,\"BRL\":3.8618,\"CAD\":1.6415,\"CHF\":1.2313,\"CNY\":8.4053,\"CZK\":30.97,\"DKK\":8.5193,\"EUR\":1.1461,\"HKD\":9.4403,\"HRK\":8.5032,\"HUF\":357.9,\"IDR\":16259.0,\"ILS\":4.4798,\"INR\":80.999,\"JPY\":140.31,\"KRW\":1405.5,\"MXN\":24.032,\"MYR\":5.4133,\"NOK\":10.476,\"NZD\":1.7591,\"PHP\":61.067,\"PLN\":4.9581,\"RON\":5.2138,\"RUB\":71.858,\"SEK\":10.977,\"SGD\":1.7239,\"THB\":43.044,\"TRY\":4.5617,\"USD\":1.2156,\"ZAR\":16.124}}";
 
         // read cache file
         String rates = ratesCache.read(this);
-
-        long fileAge = ratesCache.cacheAge(this);
 
         if(rates.equals("")){
             // no file
@@ -232,16 +217,16 @@ public class MainActivity extends AppCompatActivity
             // and start loading new data from the web
             getLoaderManager().initLoader(0, null, this);
 
-            Log.d("getRates","No cache file found. Using ancient rates and getting new rates from net.");
+            //Log.d("getRates","No cache file found. Using ancient rates and getting new rates from net.");
 
-        }else if(fileAge>4000000) { // 8640000
-            // old file in cache over 1 day old
+        }else if(ratesCache.cacheOld(this)) {
+
             // start loading new data from the web
             getLoaderManager().initLoader(0, null, this);
-            Log.d("getRates","Old cache file found. Age: " + fileAge + " Using its rates and getting new rates from net.");
+            //Log.d("getRates","Old cache file found. Age: " + fileAge + " Using its rates and getting new rates from net.");
 
         }else {
-            Log.d("getRates","Recent cache file found. Cache age: " + fileAge + " Using its rates only.");
+            //Log.d("getRates","Recent cache file found.");
         }
 
         CurrencyRates cr = new CurrencyRates();
