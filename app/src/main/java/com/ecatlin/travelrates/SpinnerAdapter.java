@@ -66,4 +66,11 @@ public class SpinnerAdapter extends ArrayAdapter<Currency> {
         notifyDataSetChanged();
     }
 
+    public int findCodePosition(String currencyCode){
+        for (int i=0; i<rates.mCurrencies.size(); i++) {
+            if(rates.mCurrencies.get(i).getCurrencyCode().equals(currencyCode)) return i;
+        }
+        return 0;
+    }
+
 }

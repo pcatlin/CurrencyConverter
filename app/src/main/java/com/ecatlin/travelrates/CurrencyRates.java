@@ -48,6 +48,13 @@ class CurrencyRates {
         this.mConvertTo = mConvertTo;
     }
 
+    Currency findCurrencyFromCode(String code){
+        for (Currency c: mCurrencies) {
+            if(code.equals(c.getCurrencyCode())) return c;
+        }
+        return null;
+    }
+    
     void setCustomRate(double rate){
         mCurrencies.remove(mCurrencies.size() - 1); // remove last item (previous custom rate)
         mCurrencies.add(new Currency("?",rate));

@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -24,6 +25,9 @@ import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.MobileAds;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.text.DecimalFormat;
 
 public class MainActivity extends AppCompatActivity
@@ -32,9 +36,12 @@ public class MainActivity extends AppCompatActivity
     private AdView mAdView;
     private Currency chosenCurrency;
     private String homeCurrency = "GBP";
+    private String prefSelectedCurrency;
+    private String prefCustomRate;
+    private String prefLocation;
     //private ArrayList<Country> Countries = new ArrayList<>();
     //private Country userNetworkCountry, userSIMCountry;
-    private Cache userCache, ratesCache;
+    private Cache userPrefs, ratesCache;
     SpinnerAdapter spinnerAdapter;
 
     @Override
@@ -62,7 +69,9 @@ public class MainActivity extends AppCompatActivity
         setContentView(R.layout.activity_main);
 
         ratesCache = new Cache("rates");
-        userCache = new Cache("prefs");
+        userPrefs = new Cache("prefs");
+
+        readPrefs();
 
         //populateCountries();
         //inHomeCountry(this);
@@ -70,8 +79,8 @@ public class MainActivity extends AppCompatActivity
         CurrencyRates rates;
         rates = getCurrencyRates();
 
-        // TODO remember last used currency
-        chosenCurrency=rates.mCurrencies.get(0);
+        // remember last used currency from prefs
+        chosenCurrency=rates.findCurrencyFromCode(prefSelectedCurrency);
 
         // TODO move spinner loading to function
         // populate the spinner/dropdown box with currencies
@@ -80,6 +89,9 @@ public class MainActivity extends AppCompatActivity
 
         // Specify the layout to use when the list of choices appears
         spinner.setAdapter(spinnerAdapter);
+
+        spinner.setSelection(spinnerAdapter.findCodePosition(prefSelectedCurrency));
+
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -95,6 +107,8 @@ public class MainActivity extends AppCompatActivity
                 rate.setText(getString(R.string.rate, chosenCurrency.getStringRate()));
 
                 //Log.d("SPINNER", "ChosenCurrency->getcode:" + chosenCurrency.getCurrencyCode() + " chosenCurrency->getRate:" + chosenCurrency.getRate() + "\n" + "ChosenRateIndex: " + chosenRateIndex);
+
+                savePrefs();
 
                 updateNumbers();
 
@@ -183,8 +197,7 @@ public class MainActivity extends AppCompatActivity
         //Log.d("onLoadFinished","Data downloaded");
         if (downloadedRates.getDateUpdated() != null) {
 
-            // TODO remember previous custom rate [1]
-            downloadedRates.Add(new Currency("?",1.0));
+            downloadedRates.Add(new Currency("?",Double.valueOf(prefCustomRate)));
             spinnerAdapter.updateRates(downloadedRates.mCurrencies);
 
             ratesCache.write(this, downloadedRates.getJSON());
@@ -232,13 +245,56 @@ public class MainActivity extends AppCompatActivity
         CurrencyRates cr = new CurrencyRates();
         cr.parseJSONrates(rates);
 
-        // TODO remember previous custom rate [1]
-        cr.Add(new Currency(getString(R.string.customRateCode), 1.0));  // custom rate
+        cr.Add(new Currency(getString(R.string.customRateCode), Double.valueOf(prefCustomRate)));  // custom rate
 
         TextView date = (TextView) findViewById(R.id.updatedText);
         date.setText(cr.getDateUpdated());
 
         return cr;
+    }
+
+    private void readPrefs(){
+        String defaultPrefs = "{\"selectedCurrency\":\"EUR\",\"customRate\":1,\"homeCurrency\":\"GBP\",\"location\":\"home\"}";
+
+        String prefs = userPrefs.read(this);
+        if(prefs.equals("")){
+            // no file, use defaults
+            prefs = defaultPrefs;
+        }
+
+        try {
+
+            JSONObject root =  new JSONObject(prefs);
+            prefSelectedCurrency = root.getString("selectedCurrency");
+            prefCustomRate = root.getString("customRate");
+            homeCurrency = root.getString("homeCurrency");
+            prefLocation = root.getString("location");
+
+            //Log.d("readPrefs", "Parsed JSON dated: ");
+
+        } catch (JSONException e) {
+            Log.e("readPrefs", "Problem parsing the JSON userPrefs", e);
+        }
+
+    }
+
+    private void savePrefs(){
+
+        try {
+            JSONObject jsonObj = new JSONObject();
+            jsonObj.put("selectedCurrency", chosenCurrency.getCurrencyCode());
+            jsonObj.put("customRate", spinnerAdapter.rates.getCustomRateString());
+            jsonObj.put("homeCurrency", homeCurrency);
+            jsonObj.put("location", "home"); // not used yet...
+
+            userPrefs.write(this, jsonObj.toString());
+            //Log.d("savePrefs", "Prefs saved");
+        }
+        catch(JSONException ex) {
+            ex.printStackTrace();
+            Log.e("savePrefs", "Problem saving prefs");
+        }
+
     }
 
 
@@ -442,10 +498,12 @@ public class MainActivity extends AppCompatActivity
 
         chosenCurrency=spinnerAdapter.getCurrency(lastItemIndex);
 
+        savePrefs();
         updateNumbers();
 
         TextView rate = (TextView)findViewById(R.id.rateText);
         rate.setText(getString(R.string.rate, chosenCurrency.getStringRate()));
+
     }
 
     /*
