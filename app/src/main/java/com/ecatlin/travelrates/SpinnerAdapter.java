@@ -55,10 +55,6 @@ public class SpinnerAdapter extends ArrayAdapter<Currency> {
         return getView(position,convertView,parent);
     }
 
-    public void addCustomRate(double customRate) {
-        rates.Add(new Currency(getContext().getString(R.string.customRateCode), customRate));  // custom rate
-        notifyDataSetChanged();
-    }
 
     public void updateRates(List<Currency> newRates){
         this.clear();

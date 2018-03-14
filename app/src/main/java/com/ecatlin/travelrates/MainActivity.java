@@ -518,9 +518,9 @@ public class MainActivity extends AppCompatActivity
     */
 
 
-    /**
-     * Get ISO 3166-1 alpha-2 country code for this device (or null if not available)
-     * @param context Context reference to get the TelephonyManager instance from
+    /*
+      Get ISO 3166-1 alpha-2 country code for this device (or null if not available)
+      @param context Context reference to get the TelephonyManager instance from
      */
     /*
     private Boolean inHomeCountry(Context context) {

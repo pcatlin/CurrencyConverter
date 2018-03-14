@@ -66,12 +66,6 @@ class CurrencyRates {
         else return "";
     }
 
-    Double getCustomRate(){
-        Currency custom = mCurrencies.get(mCurrencies.size() - 1);
-        if(custom.getCurrencyCode().equals("?")) return custom.getRate();
-        else return 1.0;
-    }
-
     String getDateUpdated() {
         if(mDateUpdated==null) return null;
         else{
