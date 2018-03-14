@@ -58,6 +58,9 @@ public class MainActivity extends AppCompatActivity
             case R.id.setCustom:
                 showEditCustomRateDialog();
                 return true;
+            case R.id.setHome:
+                showSetHomeDialog(spinnerAdapter.rates.getAllCurrencies());
+                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
@@ -89,9 +92,7 @@ public class MainActivity extends AppCompatActivity
 
         // Specify the layout to use when the list of choices appears
         spinner.setAdapter(spinnerAdapter);
-
         spinner.setSelection(spinnerAdapter.findCodePosition(prefSelectedCurrency));
-
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -109,14 +110,11 @@ public class MainActivity extends AppCompatActivity
                 //Log.d("SPINNER", "ChosenCurrency->getcode:" + chosenCurrency.getCurrencyCode() + " chosenCurrency->getRate:" + chosenCurrency.getRate() + "\n" + "ChosenRateIndex: " + chosenRateIndex);
 
                 savePrefs();
-
                 updateNumbers();
-
             }
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
-
             }
         });
 
@@ -244,6 +242,12 @@ public class MainActivity extends AppCompatActivity
 
         CurrencyRates cr = new CurrencyRates();
         cr.parseJSONrates(rates);
+
+        if(!homeCurrency.equals(cr.getBase())){
+            // if the home country has changed, retrieve new rates from the net
+            //getLoaderManager().initLoader(0, null, this);
+            getLoaderManager().restartLoader(0,null,this);
+        }
 
         cr.Add(new Currency(getString(R.string.customRateCode), Double.valueOf(prefCustomRate)));  // custom rate
 
@@ -429,6 +433,56 @@ public class MainActivity extends AppCompatActivity
         away13.setText(getString(R.string.currencyvalue, away13.getTag(), chosenCurrency.getCurrencyCode()));
         away14.setText(getString(R.string.currencyvalue, away14.getTag(), chosenCurrency.getCurrencyCode()));
         away15.setText(getString(R.string.currencyvalue, away15.getTag(), chosenCurrency.getCurrencyCode()));
+    }
+
+    public void showSetHomeDialog(CurrencyRates currencies){
+
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
+        LayoutInflater inflater = this.getLayoutInflater();
+        final View dialogView = inflater.inflate(R.layout.sethome_dialog, null);
+        dialogBuilder.setView(dialogView);
+
+
+        // TODO populate spinner with all countries
+        final Spinner sp = (Spinner) dialogView.findViewById(R.id.setHomeSpinner);
+        final SpinnerAdapter spinnerAdapter2 = new SpinnerAdapter(this, R.layout.spinner_row, R.id.currencycode, currencies);
+
+        // Specify the layout to use when the list of choices appears
+        sp.setAdapter(spinnerAdapter2);
+        sp.setSelection(spinnerAdapter2.findCodePosition(homeCurrency));
+        sp.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
+        dialogBuilder.setTitle(R.string.setHome);
+        dialogBuilder.setMessage(R.string.setHomeDesc);
+        dialogBuilder.setPositiveButton(getString(R.string.change), new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int whichButton) {
+                Currency selectedCurrency = (Currency)sp.getSelectedItem();
+                homeCurrency = selectedCurrency.getCurrencyCode();
+                savePrefs();
+                CurrencyRates rates;
+                rates = getCurrencyRates();
+                spinnerAdapter.updateRates(rates.mCurrencies);
+                updateNumbers();
+            }
+        });
+
+        dialogBuilder.setNegativeButton(getString(R.string.cancel), new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int whichButton) {
+                //pass
+            }
+        });
+        AlertDialog b = dialogBuilder.create();
+        b.show();
     }
 
     public void showEditCustomRateDialog(){

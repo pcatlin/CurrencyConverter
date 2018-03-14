@@ -7,7 +7,7 @@ import java.util.Locale;
  *
  * Created by paul on 19/03/2017.
  */
-class Currency{
+class Currency implements Comparable<Currency>{
     private String mCurrencyCode;
     private double mRate;
     private Integer mCurrencyNameId;
@@ -44,6 +44,13 @@ class Currency{
 
     public Integer getCurrencyNameId(){
         return mCurrencyNameId;
+    }
+
+    @Override
+    public int compareTo(Currency compareCurrency) {
+
+        return this.getCurrencyCode().compareTo(compareCurrency.getCurrencyCode());
+
     }
 
     private void addFlagAndName(){

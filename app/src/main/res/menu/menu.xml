@@ -10,4 +10,7 @@
         android:enabled="true"
         android:title="@string/setCustomRate"
         app:showAsAction="ifRoom|withText" />
+    <item
+        android:id="@+id/setHome"
+        android:title="@string/setHome" />
 </menu>

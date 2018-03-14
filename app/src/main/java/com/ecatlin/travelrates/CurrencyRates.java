@@ -40,11 +40,35 @@ class CurrencyRates {
         mCurrencyCodes.add(C.getCurrencyCode());
     }
 
-    String getConvertTo() {
+
+    CurrencyRates getAllCurrencies(){
+        // return all currencies for use in the change home currency spinner dialog box
+        // exclude custom rate 'currency' and include currency home currency
+
+        CurrencyRates copy = new CurrencyRates();
+
+        for (Currency c: mCurrencies) {
+            if(c.getCurrencyCode().equals("?")){
+                // do not include the custom currency item
+            }
+            else{
+                copy.Add(c);
+            }
+        }
+
+        // add home currency with dummy rate
+        copy.Add(new Currency(mConvertTo,1));
+
+        // sort currencies
+
+        return copy;
+    }
+
+    String getBase() {
         return mConvertTo;
     }
 
-    void setConvertTo(String mConvertTo) {
+    void setBase(String mConvertTo) {
         this.mConvertTo = mConvertTo;
     }
 
@@ -78,6 +102,10 @@ class CurrencyRates {
         mCurrencyCodes.clear();
         mCurrencies.clear();
         mDateUpdated = null;
+    }
+
+    void Sort(){
+        //mCurrencies.sort();
     }
 
     String getJSON(){
