@@ -74,13 +74,16 @@ public class MainActivity extends AppCompatActivity
         ratesCache = new Cache("rates");
         userPrefs = new Cache("prefs");
 
-        readPrefs();
+        Boolean prefsExist=readPrefs();
 
         //populateCountries();
         //inHomeCountry(this);
 
         CurrencyRates rates;
         rates = getCurrencyRates();
+
+        // if prefs do not exist (first run of app?) show set home currency dialog box
+        if(!prefsExist) showSetHomeDialog(rates.getAllCurrencies());
 
         // remember last used currency from prefs
         chosenCurrency=rates.findCurrencyFromCode(prefSelectedCurrency);
@@ -117,6 +120,8 @@ public class MainActivity extends AppCompatActivity
             public void onNothingSelected(AdapterView<?> parent) {
             }
         });
+
+
 
         TextView rate = (TextView)findViewById(R.id.rateText);
         rate.setText(getString(R.string.rate, chosenCurrency.getStringRate()));
@@ -257,13 +262,15 @@ public class MainActivity extends AppCompatActivity
         return cr;
     }
 
-    private void readPrefs(){
+    private Boolean readPrefs(){
         String defaultPrefs = "{\"selectedCurrency\":\"EUR\",\"customRate\":1,\"homeCurrency\":\"GBP\",\"location\":\"home\"}";
+        Boolean existing = true;
 
         String prefs = userPrefs.read(this);
         if(prefs.equals("")){
             // no file, use defaults
             prefs = defaultPrefs;
+            existing = false;
         }
 
         try {
@@ -279,6 +286,8 @@ public class MainActivity extends AppCompatActivity
         } catch (JSONException e) {
             Log.e("readPrefs", "Problem parsing the JSON userPrefs", e);
         }
+
+        return existing;
 
     }
 
@@ -464,7 +473,7 @@ public class MainActivity extends AppCompatActivity
 
         dialogBuilder.setTitle(R.string.setHome);
         dialogBuilder.setMessage(R.string.setHomeDesc);
-        dialogBuilder.setPositiveButton(getString(R.string.change), new DialogInterface.OnClickListener() {
+        dialogBuilder.setPositiveButton(getString(R.string.set), new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int whichButton) {
                 Currency selectedCurrency = (Currency)sp.getSelectedItem();
                 homeCurrency = selectedCurrency.getCurrencyCode();

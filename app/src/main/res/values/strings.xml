@@ -16,6 +16,7 @@
     <string name="setHomeDesc">Choose the currency to convert foreign currencies into</string>
     <string name="customRateTip">1.5</string>
     <string name="change">Change</string>
+    <string name="set">Set</string>
     <string name="done">Done</string>
     <string name="cancel">Cancel</string>
 
