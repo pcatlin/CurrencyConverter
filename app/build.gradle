@@ -1,7 +1,7 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 25
+    compileSdkVersion 26
 
     buildTypes {
         release {
@@ -16,7 +16,7 @@ android {
         ads {
             minSdkVersion 21
             applicationId 'com.ecatlin.travelrates'
-            targetSdkVersion 25
+            targetSdkVersion 26
             versionCode 9
             versionName '0.60'
             versionNameSuffix ''
@@ -25,7 +25,7 @@ android {
         noads {
             minSdkVersion 21
             applicationId 'com.ecatlin.travelratespro'
-            targetSdkVersion 25
+            targetSdkVersion 26
             versionCode 9
             versionName '0.60'
             versionNameSuffix ''
@@ -35,11 +35,11 @@ android {
 }
 
 dependencies {
-    compile fileTree(include: ['*.jar'], dir: 'libs')
-    androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
+    androidTestImplementation('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
-    compile 'com.android.support:appcompat-v7:25.4.0'
-    compile 'com.google.android.gms:play-services-ads:11.8.0'
-    testCompile 'junit:junit:4.12'
+    implementation 'com.android.support:appcompat-v7:26.1.0'
+    implementation 'com.google.android.gms:play-services-ads:12.0.1'
+    androidTestImplementation 'junit:junit:4.12'
 }
